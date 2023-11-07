@@ -56,3 +56,9 @@ Feature (또는 topic branches):
 
 새로운 기능 개발을 위한 브랜치로 각 기능이나 향상사항 별로 생성됩니다.
 기능이 완성되고 테스트를 통과하면 develop 브랜치로 병합됩니다.<br> 
+
+
+### PR 및 Fork 방식
+Fork를 하고  본인 repo feature 브랜치에 변경사항 수정한 뒤
+feature 브랜치로 Pull Request하기 (보내는 거)
+develop 브랜치에서 pull 하기       (받는 거)
