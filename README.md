@@ -40,3 +40,19 @@ feat : MyPageView.vue에서 라우터 연결<br>
 chore : HomeView.vue에서 배경화면 색 변경<br> 
 docs : README 수정<br>
 refactor : LogIn.vue 코드 여백 정리<br> 
+
+### branch
+Main (또는 Master):
+
+프로젝트의 주 브랜치로, 제품으로 출시될 수 있는 최신 안정적인 코드 상태를 유지합니다.
+보통 직접적인 커밋 대신 병합(머지)이나 풀 리퀘스트를 통해 업데이트됩니다.<br> 
+
+Develop (또는 Dev):
+
+개발의 최신 작업이 진행되는 브랜치로, 다음 릴리스를 준비하는 중간 단계입니다.
+이 브랜치는 정기적으로 main 브랜치로 병합됩니다.<br> 
+
+Feature (또는 topic branches):
+
+새로운 기능 개발을 위한 브랜치로 각 기능이나 향상사항 별로 생성됩니다.
+기능이 완성되고 테스트를 통과하면 develop 브랜치로 병합됩니다.<br> 
