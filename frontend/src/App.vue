@@ -1,26 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <menu-widget></menu-widget>
+    <sidebar-widget></sidebar-widget>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MenuWidget from "./components/menu_widget.vue";
+import SidebarWidget from "./components/sidebar_widget.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    "menu-widget": MenuWidget,
+    "sidebar-widget": SidebarWidget,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.centered-text {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 150px;
+margin-left: 500px;
+}
+
+.centered-text p {
+  margin-bottom: 30px;
 }
 </style>
