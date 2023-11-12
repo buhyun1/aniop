@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 from langdetect import detect, DetectorFactory, lang_detect_exception
@@ -16,7 +16,7 @@ section_urls = {
 }
 
 # 오늘 날짜 설정
-today = datetime.today().strftime('%Y%m%d')
+today = (datetime.today() - timedelta(days=1)).strftime('%Y%m%d')
 
 # 뉴스 기사를 가져오는 함수
 def get_news_titles(section_url, reg_date):
