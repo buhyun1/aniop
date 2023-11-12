@@ -15,8 +15,8 @@
   .menu-widget {
     display: flex;
     align-items: center;
-    margin-top: 30px;
-    margin-left: 30px;
+    margin-top: 4%;
+    margin-left: 4%;
   }
   
   .logo-title {
@@ -51,11 +51,13 @@
   
   @media (min-width: 1001px) {
     .logo-title {
-      gap: 20px;
+      justify-content: space-between;
+      width: 12%;
     }
   
     .menu {
-      gap: 500px;
+      justify-content: space-between;
+      width: 50%;
     }
   }
   </style>
