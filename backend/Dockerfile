@@ -7,6 +7,7 @@ WORKDIR /backend
 COPY ./package*.json ./
 # npm을 이용하여 의존성 설치
 RUN npm install
+COPY backend/pulbic/dist /usr/src/app/public
 # 나머지 소스 코드 복사
 COPY . .
 # 백엔드 서버가 사용할 포트 설정

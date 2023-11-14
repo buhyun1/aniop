@@ -9,6 +9,24 @@ const sshClient = new Client();
 
 let db;
 
+// API 라우트 예시
+app.use('/api', (req, res) => {
+  res.json({ message: '이것은 API 응답입니다.' });
+});
+// Vue.js 빌드 파일을 정적 파일로 제공
+// Dockerfile에서 복사된 위치를 기반으로 경로 설정
+app.use(express.static('/usr/src/app/public'));
+// API 경로를 제외한 모든 경로에 대해 index.html 제공
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    // Dockerfile에서 복사된 위치를 기반으로 파일 경로 설정
+    res.sendFile('/usr/src/app/public/index.html');
+  } else {
+    // API 요청에 대한 404 처리
+    res.status(404).send('API not found');
+  }
+});
+
 sshClient.on('ready', () => {
   sshClient.forwardOut(
     '127.0.0.1', // 소스 주소
@@ -50,30 +68,10 @@ app.get('/articles', async (req, res) => {
     res.status(500).send('Error fetching articles');
   }
 });
-
-/*
-//POST 라우트를 설정하여 날짜에 해당하는 데이터를 검색
-const { getArticlesByDate } = require('./query');
-
-app.use(express.json()); // JSON 본문 파싱을 위한 미들웨어
-
-app.post('/articlesByDate', async (req, res) => {
-  const date = req.body.date;
-  
-  if (!date) {
-    return res.status(400).send('No date provided');
-  }
-
-  try {
-    const articles = await getArticlesByDate(db, date);
-    res.json(articles);
-  } catch (err) {
-    console.error('Error executing query: ' + err.stack);
-    res.status(500).send('Error fetching articles');
-  }
+// 모든 경로에 대해 index.html 제공
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'path/to/vuejs/dist', 'index.html'));
 });
- */
-
 // 서버 시작
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
