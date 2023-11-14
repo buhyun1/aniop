@@ -31,7 +31,7 @@ def get_model():
         print("GPU 사용 불가능: CPU에서 모델 실행")
     if model is None:
         load_model()
-    torch.save(model.state_dict(), 'model.pt')
+    # torch.save(model.state_dict(), 'model.pt')
 
     return model
 
