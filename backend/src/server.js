@@ -1,21 +1,43 @@
+// 메인 서버 파일 (예: index.js)
 require('dotenv').config();
-
 const { Client } = require('ssh2');
-const mysql = require('mysql2');
-
+const mysql = require('mysql2/promise');
+const express = require('express');
+const { getArticles } = require('./query'); // query.js 모듈 가져오기
+const app = express();
 const sshClient = new Client();
+
+let db;
+
+// API 라우트 예시
+app.use('/api', (req, res) => {
+  res.json({ message: '이것은 API 응답입니다.' });
+});
+// Vue.js 빌드 파일을 정적 파일로 제공
+// Dockerfile에서 복사된 위치를 기반으로 경로 설정
+app.use(express.static('/usr/src/app/public'));
+// API 경로를 제외한 모든 경로에 대해 index.html 제공
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    // Dockerfile에서 복사된 위치를 기반으로 파일 경로 설정
+    res.sendFile('/usr/src/app/public/index.html');
+  } else {
+    // API 요청에 대한 404 처리
+    res.status(404).send('API not found');
+  }
+});
 
 sshClient.on('ready', () => {
   sshClient.forwardOut(
     '127.0.0.1', // 소스 주소
-    22, // 임의의 소스 포트
+    12345, // 임의의 소스 포트
     process.env.RDS_HOST, // RDS 인스턴스의 내부 IP
     3306, // RDS MySQL 서버의 포트
-    (err, stream) => {
+    async (err, stream) => {
       if (err) throw err;
 
       // MySQL 연결 설정
-      const db = mysql.createConnection({
+      db = await mysql.createConnection({
         host: '127.0.0.1', // 로컬 호스트
         port: 3306,
         user: process.env.RDS_USER,
@@ -24,37 +46,8 @@ sshClient.on('ready', () => {
         stream: stream
       });
 
-      // MySQL에 연결
-      db.connect(err => {
-        if (err) {
-          console.error('Database connection failed: ' + err.stack);
-          return;
-        }
-        console.log('Connected to database');
-
-        // articles 테이블에서 데이터를 가져오는 SQL 쿼리 실행
-        db.query('SELECT * FROM Articles', (err, results) => {
-          if (err) {
-            console.error('Error executing query: ' + err.stack);
-            return;
-          }
-
-          // 결과 출력
-          console.log('Fetched ' + results.length + ' rows');
-          results.forEach(row => {
-            console.log(row); // 각 행의 데이터 출력
-          });
-
-          // 연결 종료
-          db.end(err => {
-            if (err) {
-              console.error('Error closing connection: ' + err.stack);
-              return;
-            }
-            console.log('Connection closed');
-          });
-        });
-      });
+      // 연결 성공 로그
+      console.log('Connected to database'); // 데이터베이스 연결 성공 메시지
     }
   );
 }).connect({
@@ -62,4 +55,25 @@ sshClient.on('ready', () => {
   port: 22,
   username: process.env.SSH_USER,
   privateKey: require('fs').readFileSync(process.env.SSH_PRIVATE_KEY_PATH)
+});
+
+// ... 나머지 Express 서버 및 라우팅 코드 ...
+app.get('/articles', async (req, res) => {
+  try {
+    const articles = await getArticles(db);
+    console.log('Fetched Articles:', articles); // 쿼리 결과 출력
+    res.json(articles);
+  } catch (err) {
+    console.error('Error executing query: ' + err.stack); // 에러 로그
+    res.status(500).send('Error fetching articles');
+  }
+});
+// 모든 경로에 대해 index.html 제공
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'path/to/vuejs/dist', 'index.html'));
+});
+// 서버 시작
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
