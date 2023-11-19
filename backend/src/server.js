@@ -8,6 +8,7 @@ const path = require('path');
 
 const sshClient = new Client();
 
+console.log(process.env.SSH_PRIVATE_KEY_PATH);
 let db;
 
 // API 라우트 예시
@@ -30,7 +31,6 @@ app.get('*', (req, res) => {
     console.log(`404 - API not found for path: ${req.path}`);
   }
 });
-
 sshClient.on('ready', () => {
   sshClient.forwardOut(
     '127.0.0.1', // 소스 주소
@@ -49,7 +49,6 @@ sshClient.on('ready', () => {
         database: process.env.RDS_DATABASE,
         stream: stream
       });
-
       // 연결 성공 로그
       console.log('Connected to database'); // 데이터베이스 연결 성공 메시지
     }
