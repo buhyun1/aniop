@@ -49,7 +49,6 @@ sshClient.on('ready', () => {
         database: process.env.RDS_DATABASE,
         stream: stream
       });
-
       // 연결 성공 로그
       console.log('Connected to database'); // 데이터베이스 연결 성공 메시지
     }
@@ -58,7 +57,7 @@ sshClient.on('ready', () => {
   host: process.env.SSH_HOST, // SSH 서버의 퍼블릭 IP
   port: 22,
   username: process.env.SSH_USER,
-  privateKey: require('fs').readFileSync(path.join(__dirname, 'aniop2023.pem')) // Updated path
+  privateKey: require('fs').readFileSync(process.env.SSH_PRIVATE_KEY_PATH)
 });
 
 // 모든 기사 조회

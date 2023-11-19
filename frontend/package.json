@@ -9,11 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-<<<<<<< HEAD
-    "vue": "^3.2.13",
-=======
     "vue": "^3.2.36",
->>>>>>> 1ae337f027553786a20b7f8f126b18a3bed88231
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
