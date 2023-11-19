@@ -14,8 +14,6 @@ let db;
 app.use('/api', (req, res) => {
   res.json({ message: '이것은 API 응답입니다.' });
 });
-<<<<<<< HEAD
-=======
 // Vue.js 빌드 파일을 정적 파일로 제공
 // Dockerfile에서 복사된 위치를 기반으로 경로 설정
 app.use(express.static('dist'));
@@ -32,7 +30,6 @@ app.get('*', (req, res) => {
     console.log(`404 - API not found for path: ${req.path}`);
   }
 });
->>>>>>> 1ae337f027553786a20b7f8f126b18a3bed88231
 
 sshClient.on('ready', () => {
   sshClient.forwardOut(
@@ -75,7 +72,6 @@ app.get('/api/articles', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 // 특정 날짜의 기사 조회
 app.post('/api/articles/by-date', async (req, res) => {
     const { date } = req.body;
@@ -104,8 +100,6 @@ app.post('/api/articles/by-id', async (req, res) => {
     }
 });
 
-=======
->>>>>>> 1ae337f027553786a20b7f8f126b18a3bed88231
 // 서버 시작
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
