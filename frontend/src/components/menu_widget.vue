@@ -26,7 +26,7 @@
   
   .menu {
     display: flex;
-    margin: auto;
+    margin-left: 10%;
   }
   
   .title {
@@ -58,6 +58,7 @@
     .menu {
       justify-content: space-between;
       width: 50%;
+
     }
   }
   </style>
