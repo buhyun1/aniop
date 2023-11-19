@@ -1,16 +1,16 @@
 # Docker Compose file 
 version: "3.8"
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3001:80"
-    # depends_on:
-    #   - backend
-    networks:
-      - app-network
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3001:80"
+  #   # depends_on:
+  #   #   - backend
+  #   networks:
+  #     - app-network
   backend:
     build:
       context: ./backend
@@ -27,14 +27,14 @@ services:
       dockerfile: Dockerfile
     networks:
       - app-network
-  nginx:
-    image: nginx:stable-alpine
-    ports:
-      - "8080:80"
-    depends_on:
-      - frontend
-    networks:
-      - app-network
+  # nginx:
+  #   image: nginx:stable-alpine
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - frontend
+  #   networks:
+  #     - app-network
 networks:
   app-network:
     driver: bridge
