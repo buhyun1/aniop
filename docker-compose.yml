@@ -21,12 +21,12 @@ services:
       - "3000:3000"
     networks:
       - app-network
-  crawler:
-    build:
-      context: ./crawler
-      dockerfile: Dockerfile
-    networks:
-      - app-network
+  # crawler:
+  #   build:
+  #     context: ./crawler
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - app-network
   # nginx:
   #   image: nginx:stable-alpine
   #   ports:
