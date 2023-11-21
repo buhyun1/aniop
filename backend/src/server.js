@@ -3,6 +3,7 @@ require('dotenv').config();
 const { Client } = require('ssh2');
 const mysql = require('mysql2/promise');
 const express = require('express');
+const path = require('path');
 const { getArticles } = require('./query'); // query.js 모듈 가져오기
 const app = express();
 const sshClient = new Client();
@@ -13,14 +14,16 @@ let db;
 app.use('/api', (req, res) => {
   res.json({ message: '이것은 API 응답입니다.' });
 });
+
 // Vue.js 빌드 파일을 정적 파일로 제공
 // Dockerfile에서 복사된 위치를 기반으로 경로 설정
-app.use(express.static('/usr/src/app/public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 // API 경로를 제외한 모든 경로에 대해 index.html 제공
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
     // Dockerfile에서 복사된 위치를 기반으로 파일 경로 설정
-    res.sendFile('/usr/src/app/public/index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
   } else {
     // API 요청에 대한 404 처리
     res.status(404).send('API not found');
