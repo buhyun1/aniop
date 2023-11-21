@@ -1,4 +1,5 @@
 import torch
+import transformers
 from transformers import BertConfig, BertTokenizer, BertForSequenceClassification
 import json
 from mymodel import MyModel1
