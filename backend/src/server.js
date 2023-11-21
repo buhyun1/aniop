@@ -1,13 +1,14 @@
-// 메인 서버 파일 (예: index.js)
 require('dotenv').config();
 const { Client } = require('ssh2');
 const mysql = require('mysql2/promise');
 const express = require('express');
-const path = require('path');
-const { getArticles } = require('./query'); // query.js 모듈 가져오기
+const { getArticles, getArticlesByDate, getArticleById } = require('./query'); // query.js 모듈 가져오기
 const app = express();
+const path = require('path');
+
 const sshClient = new Client();
 
+console.log(process.env.SSH_PRIVATE_KEY_PATH);
 let db;
 
 // API 라우트 예시
@@ -17,19 +18,20 @@ app.use('/api', (req, res) => {
 
 // Vue.js 빌드 파일을 정적 파일로 제공
 // Dockerfile에서 복사된 위치를 기반으로 경로 설정
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static('dist'));
 // API 경로를 제외한 모든 경로에 대해 index.html 제공
 app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    // Dockerfile에서 복사된 위치를 기반으로 파일 경로 설정
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  console.log(`GET request received: ${req.path}`);
+  if (!req.path.startsWith('/api')) {    
+    const absolutePath = path.resolve(__dirname, '..', 'dist', 'index.html');
+    console.log(`Serving index.html from: ${absolutePath}`);
+    res.sendFile(absolutePath);
+
   } else {
-    // API 요청에 대한 404 처리
     res.status(404).send('API not found');
+    console.log(`404 - API not found for path: ${req.path}`);
   }
 });
-
 sshClient.on('ready', () => {
   sshClient.forwardOut(
     '127.0.0.1', // 소스 주소
@@ -48,7 +50,6 @@ sshClient.on('ready', () => {
         database: process.env.RDS_DATABASE,
         stream: stream
       });
-
       // 연결 성공 로그
       console.log('Connected to database'); // 데이터베이스 연결 성공 메시지
     }
@@ -60,23 +61,48 @@ sshClient.on('ready', () => {
   privateKey: require('fs').readFileSync(process.env.SSH_PRIVATE_KEY_PATH)
 });
 
-// ... 나머지 Express 서버 및 라우팅 코드 ...
-app.get('/articles', async (req, res) => {
-  try {
-    const articles = await getArticles(db);
-    console.log('Fetched Articles:', articles); // 쿼리 결과 출력
-    res.json(articles);
-  } catch (err) {
-    console.error('Error executing query: ' + err.stack); // 에러 로그
-    res.status(500).send('Error fetching articles');
-  }
+// 모든 기사 조회
+app.get('/api/articles', async (req, res) => {
+    try {
+        const articles = await getArticles(db);
+        res.json(articles);
+    } catch (err) {
+        console.error('Error fetching articles:', err.stack);
+        res.status(500).send('Internal Server Error');
+    }
 });
-// 모든 경로에 대해 index.html 제공
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'path/to/vuejs/dist', 'index.html'));
+
+// 특정 날짜의 기사 조회
+app.post('/api/articles/by-date', async (req, res) => {
+    const { date } = req.body;
+    try {
+        const articles = await getArticlesByDate(db, date);
+        res.json(articles);
+    } catch (err) {
+        console.error('Error fetching articles by date:', err.stack);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
+// 기사 ID로 기사 정보 조회
+app.post('/api/articles/by-id', async (req, res) => {
+    const { articleId } = req.body;
+    try {
+        const article = await getArticleById(db, articleId);
+        if (article) {
+            res.json(article);
+        } else {
+            res.status(404).send('Article not found');
+        }
+    } catch (err) {
+        console.error('Error fetching article by ID:', err.stack);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 // 서버 시작
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+

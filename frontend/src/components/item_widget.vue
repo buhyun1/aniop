@@ -14,6 +14,6 @@
   left: 25%;
   display: flex;
   justify-content: space-between;
-  width: 70%;
+  width: 60%;
 }
 </style>
