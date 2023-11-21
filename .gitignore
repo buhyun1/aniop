@@ -4,3 +4,5 @@ node_modules/
 model.safetensors
 model.pth
 pytorch_model.bin
+kobert/
+kobert.zip
