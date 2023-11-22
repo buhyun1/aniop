@@ -13,7 +13,7 @@ async function getArticles(db) {
 
 async function getArticlesByDate(db, date) {
     try {
-        const query = 'SELECT title, content FROM articles WHERE publish_date = ?';
+        const query = 'SELECT Title, content FROM Articles WHERE publish_date = ?';
         const [rows] = await db.query(query, [date]);
         return rows;
     } catch (err) {
@@ -24,7 +24,7 @@ async function getArticlesByDate(db, date) {
 
 async function getArticleById(db, articleId) {
     try {
-        const query = 'SELECT title, link, source FROM articles WHERE id = ?';
+        const query = 'SELECT Title, ArticleLink, Body FROM Articles WHERE ArticleID = ?';
         const [rows] = await db.query(query, [articleId]);
         return rows[0]; // 결과가 하나의 기사 정보이므로 첫 번째 요소 반환
     } catch (err) {

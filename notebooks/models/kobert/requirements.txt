@@ -1,0 +1,4 @@
+Transformers 4.12.5
+Pytorch 1.10.0+cu111
+Datasets 1.15.1
+Tokenizers 0.10.3
