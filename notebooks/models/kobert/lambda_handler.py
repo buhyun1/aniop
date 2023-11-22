@@ -3,6 +3,16 @@ from transformers import BertConfig, BertTokenizer, BertForSequenceClassificatio
 import json
 from mymodel import MyModel1
 import boto3
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv('./.env')
+
+# 환경 변수 가져오기
+aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+region_name = os.getenv('REGION_NAME')
 
 def load_model(model_path, number_of_labels, tokenizer_path='bert-base-uncased'):
     config = BertConfig.from_pretrained(tokenizer_path, num_labels=number_of_labels)
@@ -22,9 +32,9 @@ def predict(model, tokenizer, input_text):
 
 def lambda_handler(event, context):
     s3 = boto3.client('s3', 
-                      region_name='ap-northeast-2', 
-                      aws_access_key_id='AKIAZAPACE62LXQRT2WS', 
-                      aws_secret_access_key='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')
+                      region_name=region_name, 
+                  aws_access_key_id=aws_access_key_id, 
+                  aws_secret_access_key=aws_secret_access_key)
 
     # S3 버킷과 파일 이름
     bucket = event['bucket']
