@@ -4,6 +4,15 @@ import umap.umap_ as umap
 from sklearn.cluster import AgglomerativeClustering
 import hdbscan
 import logging
+import boto3
+import os
+import pandas as pd
+from dotenv import load_dotenv
+
+
+load_dotenv()
+aws_secret_access_key = os.getenv('aws_secret_access_key')
+aws_access_key_id = os.getenv('aws_access_key_id')
 
 
 # Logging configuration
@@ -11,6 +20,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 def load_model(model_path):
+    # S3에서 모델 다운로드
+    # 모델 로드
     model = SentenceTransformer(model_path)
     return model
 
@@ -18,96 +29,95 @@ def load_model(model_path):
 def umap_process(corpus_embeddings, n_components=5):
     return umap.UMAP(n_neighbors=15, n_components=n_components, metric='cosine').fit_transform(corpus_embeddings)
 
-def cluster_texts(model, input_texts):
-    embeddings = model.encode(input_texts)
-    reduced_embeddings = umap_process(embeddings, n_components=5)
-
-    # Agglomerative Clustering
-    agg_cluster = AgglomerativeClustering(n_clusters=None, distance_threshold=0.3)
-    agg_labels = agg_cluster.fit_predict(reduced_embeddings)
-
-    # HDBSCAN Clustering
-    hdbscan_cluster = hdbscan.HDBSCAN(min_cluster_size=3, gen_min_span_tree=True)
-    hdbscan_labels = hdbscan_cluster.fit_predict(reduced_embeddings)
-
-    return agg_labels, hdbscan_labels
+def cluster_texts_by_category(model, df, category_col='Category', text_col='Title'):
+    clustered_data = []
+    for category in df[category_col].unique():
+        category_df = df[df[category_col] == category]
+        if not category_df.empty:
+            embeddings = model.encode(category_df[text_col].tolist())
+            reduced_embeddings = umap_process(embeddings)
+            if reduced_embeddings.shape[0] < 2:
+                # Skip if the number of samples is less than 2
+                print(f'Skipping category {category} due to insufficient number of samples.')
+                continue  # 샘플 개수가 2개 미만인 경우 스킵
+            # Agglomerative Clustering
+            agg_cluster = AgglomerativeClustering(n_clusters=None, distance_threshold=0.3)
+            agg_labels = agg_cluster.fit_predict(reduced_embeddings)
+            # HDBSCAN Clustering
+            hdbscan_cluster = hdbscan.HDBSCAN(min_cluster_size=3, gen_min_span_tree=True)
+            hdbscan_labels = hdbscan_cluster.fit_predict(reduced_embeddings)
+            # Add results to DataFrame
+            category_df['Agglomerative_Cluster'] = agg_labels
+            category_df['HDBSCAN_Cluster'] = hdbscan_labels
+            clustered_data.append(category_df)
+            
+    return pd.concat(clustered_data)
 
 def lambda_handler(event):
-    logger.info("Extracting titles and categories from the event.")
-    model_path = './model_file'  # Adjust the path as needed
+    s3 = boto3.client('s3', 
+                      region_name='ap-northeast-2', 
+                      aws_access_key_id=aws_secret_access_key, 
+                      aws_secret_access_key=aws_access_key_id)
+    # S3 버킷과 객체 키 추출
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    object_key = event['Records'][0]['s3']['object']['key']
+
+    # S3에서 입력 파일 읽기
+    input_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
+    input_data = json.loads(input_obj['Body'].read().decode('utf-8'))    #local_file_path = '/tmp/' + object_key.split('/')[-1]
+
+    # for local test json path
+    local_file_path = './tmp'
+
+    # 출력 데이터 준비
+    outdata = input_data.copy()
+    
+    #json to dataframe
+    df = pd.DataFrame(input_data['news'])
+    data=df
+    # local_test 모델 로드
+    model_path = './model_file'
     model = load_model(model_path)
 
-  # Extract titles from the event
-    logger.info("Extracting titles and categories from the event.")
-    articles = event['articles']
-    titles = [article['title'] for article in articles]
-    categories = [article['category'] for article in articles]
-    
-     # Perform clustering
-    logger.info("Performing clustering on the extracted titles.")
-    agg_labels, hdbscan_labels = cluster_texts(model, titles)
-    
-    # Assign clusters to the data
-    logger.info("Assigning clusters to the data.")
+    # 카테고리 별 클러스터링 수행
+    logger.info("Performing clustering by category.")
+    clustered_df = cluster_texts_by_category(model, df)
 
-    clustered_data = []
-    for i, title, category in zip(range(len(titles)), titles, categories):
-        clustered_data.append({
-            'title': title,
-            'category': category,
-            'Agglomerative_Cluster': agg_labels[i],
-            'HDBSCAN_Cluster': hdbscan_labels[i]
-        })
-    logger.info("Clustering completed. Returning results.")
-    return clustered_data
-# Example event data
-event = {
-  "articles": [
-    {
-      "title": "삼성전자, 새로운 5G 칩셋 출시 예정",
-      "category": "기술"
-    },
-    {
-      "title": "한국 정부, 재생 가능 에너지에 대한 투자 증가",
-      "category": "환경"
-    },
-    {
-      "title": "국내 코로나19 백신 개발, 임상시험 단계 진입",
-      "category": "보건"
-    },
-    {
-      "title": "한류 열풍, 전 세계적으로 K-팝의 인기 상승 중",
-      "category": "문화"
-    },
-    {
-      "title": "한국 경제 성장률, 올해 상반기 중 예측치 초과 달성",
-      "category": "경제"
-    },
-    {
-      "title": "국내 최고 기업들의 채용 공고 증가, 일자리 시장 활성화 기대",
-      "category": "경영"
-    },
-    {
-      "title": "서울시, 대중교통 체계 개편안 발표",
-      "category": "정책"
-    },
-    {
-      "title": "한국 영화 '기생충', 국제 영화제에서 다수 상 수상",
-      "category": "엔터테인먼트"
-    },
-    {
-      "title": "인공지능을 활용한 농업 기술, 농가 수익성 향상에 기여",
-      "category": "농업"
-    },
-    {
-      "title": "국내 대학들, 온라인 교육 플랫폼 확대 계획 발표",
-      "category": "교육"
+
+    # 클러스터링 결과를 JSON으로 변환
+    logger.info("Converting results to JSON.")
+    clustered_json = clustered_df.to_json(orient='records', force_ascii=False)
+    print("clustered_json :",clustered_json)  # 출력된 결과 확인
+
+    outdata['news'] = json.loads(clustered_json)
+
+   
+
+    # 결과 파일을 S3에 업로드
+    output_object_key = 'clustered/' + object_key.split('/')[-1]
+    output_json = json.dumps(outdata, ensure_ascii=False)
+
+
+    # S3에 결과 파일 쓰기
+    s3.put_object(Body=output_json, Bucket=bucket_name, Key=object_key)
+
+    return {
+        'statusCode': 200,
+        'body': 'File processed and uploaded successfully.'
     }
-  ]
+# Example event data
+test_event = {
+    'Records': [
+        {
+            's3': {
+                'bucket': {'name': 'aniop2023'},
+                'object': {'key': 'manual_predicted_news_articles.json'}
+            }
+        }
+    ]
 }
-
 # Execute the function
-result = lambda_handler(event)
+result = lambda_handler(test_event)
 
 # Print the results
 print(result)
