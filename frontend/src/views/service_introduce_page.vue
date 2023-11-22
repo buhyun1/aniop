@@ -73,13 +73,18 @@ export default {
     }
   }
   @media(max-width: 1001px) {
-    .introtext, .intro_person, .line{
+    .intro_person, .line{
       display: none;
+    }
+    .introtext, .introbox{
+      width: 400px;
+      height: 400px;
     }
     .introtitle{
       display: flex;
       justify-content: center;
       align-items: center; 
+      width: 400px;   
     }
 }
   </style>

@@ -1,0 +1,5 @@
+{
+    "bucket": "aniop2023",
+    "input_file": "s3://aniop2023/manual_predicted_news_articles.json",
+    "output_file": "s3://aniop2023/manual_predicted_news_articles.json"
+}
