@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 
 # .env 파일 로드
-load_dotenv('./.env')
+load_dotenv('../../.env')
 
 # 환경 변수 가져오기
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
@@ -18,7 +18,7 @@ def load_model(model_path, number_of_labels, tokenizer_path='bert-base-uncased')
     config = BertConfig.from_pretrained(tokenizer_path, num_labels=number_of_labels)
     model = MyModel1(config) # 설정 파일 로드
 
-    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')), strict=False)
     tokenizer = BertTokenizer.from_pretrained(tokenizer_path)
     model.eval()  # 평가 모드로 설정
     return model, tokenizer
@@ -45,9 +45,10 @@ def lambda_handler(event, context):
     input_obj = s3.get_object(Bucket=bucket, Key=input_file_key)
     input_data = json.loads(input_obj['Body'].read().decode('utf-8'))
 
-    model, tokenizer = load_model('./model.pth', 4)
-    
-    # 출력 데이터 준비
+    #model, tokenizer = load_model('./model.pth', 4)
+    model, tokenizer = load_model('../models/kobert/model.pth', 4)
+
+   # 출력 데이터 준비
     outdata = input_data.copy()
     
     for article in outdata['news']:
@@ -71,8 +72,8 @@ def lambda_handler(event, context):
 # 로컬 테스트
 if __name__ == "__main__":
     test_event = {'bucket': 'aniop2023', 
-                  'input_file': 'manual_predicted_news_articles.json', 
-                  'output_file': 'manual_predicted_news_articles.json'}
+                  'input_file': '20231122_combined_news.json', 
+                  'output_file': '20231122_combined_news_2.json'}
     test_context = None
     result = lambda_handler(test_event, test_context)
     print(result)
