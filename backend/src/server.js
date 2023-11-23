@@ -2,11 +2,12 @@ const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 const mysql = require('mysql2/promise');
 const express = require('express');
 const { getArticles, getArticlesByDate, getArticleById } = require('./query'); // query.js 모듈 가져오기
-
+const cors = require('cors');
 const app = express();
 const path = require('path');
 
 let db;
+app.use(cors()); // 모든 출처 허용
 
 async function initializeDatabase() {
   try {
