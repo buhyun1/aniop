@@ -1,65 +1,91 @@
-require('dotenv').config();
+const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
+const mysql = require('mysql2/promise');
+const express = require('express');
+const { getArticles, getArticlesByDate, getArticleById } = require('./query'); // query.js 모듈 가져오기
 
-const { Client } = require('ssh2');
-const mysql = require('mysql2');
+const app = express();
+const path = require('path');
 
-const sshClient = new Client();
+let db;
 
-sshClient.on('ready', () => {
-  sshClient.forwardOut(
-    '127.0.0.1', // 소스 주소
-    22, // 임의의 소스 포트
-    process.env.RDS_HOST, // RDS 인스턴스의 내부 IP
-    3306, // RDS MySQL 서버의 포트
-    (err, stream) => {
-      if (err) throw err;
+async function initializeDatabase() {
+  try {
+    db = await mysql.createConnection({
+      host: process.env.MYSQL_HOST,
+      port: process.env.MYSQL_PORT,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE
+    });
 
-      // MySQL 연결 설정
-      const db = mysql.createConnection({
-        host: '127.0.0.1', // 로컬 호스트
-        port: 3306,
-        user: process.env.RDS_USER,
-        password: process.env.RDS_PASSWORD,
-        database: process.env.RDS_DATABASE,
-        stream: stream
-      });
+    console.log('Connected to the database');
 
-      // MySQL에 연결
-      db.connect(err => {
-        if (err) {
-          console.error('Database connection failed: ' + err.stack);
-          return;
-        }
-        console.log('Connected to database');
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+    
+  } catch (error) {
+    console.error('Database connection error:', error);
+  }
+}
 
-        // articles 테이블에서 데이터를 가져오는 SQL 쿼리 실행
-        db.query('SELECT * FROM Articles', (err, results) => {
-          if (err) {
-            console.error('Error executing query: ' + err.stack);
-            return;
-          }
+app.use(express.json());
 
-          // 결과 출력
-          console.log('Fetched ' + results.length + ' rows');
-          results.forEach(row => {
-            console.log(row); // 각 행의 데이터 출력
-          });
+app.use(express.static('dist'));
 
-          // 연결 종료
-          db.end(err => {
-            if (err) {
-              console.error('Error closing connection: ' + err.stack);
-              return;
-            }
-            console.log('Connection closed');
-          });
-        });
-      });
-    }
-  );
-}).connect({
-  host: process.env.SSH_HOST, // SSH 서버의 퍼블릭 IP
-  port: 22,
-  username: process.env.SSH_USER,
-  privateKey: require('fs').readFileSync(process.env.SSH_PRIVATE_KEY_PATH)
+app.get('/api/articles', async (req, res) => {
+  try {
+    console.log('Handling /api/articles request'); // 새로운 로그 메시지 추가
+    const articles = await getArticles(db);
+    console.log('Fetched articles:', articles); // 새로운 로그 메시지 추가
+    res.json(articles);
+  } catch (err) {
+    console.error('Error fetching articles:', err.stack);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
+app.post('/api/articles/by-id', async (req, res) => {
+  try {
+    const { articleId } = req.body;
+    if (articleId !== undefined) {
+      const article = await getArticleById(db, articleId);
+      if (article) {
+        res.json(article);
+      } else {
+        res.status(404).send('Article not found');
+      }
+    } else {
+      res.status(400).send('articleId is missing in the request body');
+    }
+  } catch (err) {
+    console.error('Error fetching article by ID:', err.stack);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/api/articles/by-date', async (req, res) => {
+  const { startdate, enddate } = req.body;
+  try {
+    const articles = await getArticlesByDate(db, startdate, enddate);
+    res.json(articles);
+  } catch (err) {
+    console.error('Error fetching articles by date:', err.stack);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('*', (req, res) => {
+  console.log(`GET request received: ${req.path}`);
+  if (!req.path.startsWith('/api')) {    
+    const absolutePath = path.resolve(__dirname, '..', 'dist', 'index.html');
+    console.log(`Serving index.html from: ${absolutePath}`);
+    res.sendFile(absolutePath);
+  } else {
+    res.status(404).send('API not found');
+    console.log(`404 - API not found for path: ${req.path}`);
+  }
+});
+
+initializeDatabase();

@@ -6,6 +6,7 @@ import newsCliping from '@/views/news_cliping_page.vue';
 import checkList from '@/views/check_list_page.vue';
 import loading from '@/views/loading_page.vue';
 import preview from '@/views/preview_page.vue';
+import clipingTab from '@/views/cliping_tab_page.vue';
 
 const routes = [
   {
@@ -37,6 +38,12 @@ const routes = [
     path: '/preview',
     name: 'preview',
     component: preview,
+  },
+
+  {
+    path: '/clipingTab',
+    name: 'clipingTab',
+    component: clipingTab,
   },
 ];
 
