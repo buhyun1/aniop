@@ -10,11 +10,10 @@ import pandas as pd
 from dotenv import load_dotenv
 
 
-load_dotenv()
-aws_secret_access_key = os.getenv('aws_secret_access_key')
-aws_access_key_id = os.getenv('aws_access_key_id')
-
-
+load_dotenv('../../.env')
+aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+region_name = os.getenv('REGION_NAME')
 # Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -53,15 +52,18 @@ def cluster_texts_by_category(model, df, category_col='Category', text_col='Titl
             
     return pd.concat(clustered_data)
 
-def lambda_handler(event):
+def lambda_cluster(event):
     s3 = boto3.client('s3', 
-                      region_name='ap-northeast-2', 
+                      region_name=region_name, 
                       aws_access_key_id=aws_secret_access_key, 
                       aws_secret_access_key=aws_access_key_id)
     # S3 버킷과 객체 키 추출
-    bucket_name = event['Records'][0]['s3']['bucket']['name']
-    object_key = event['Records'][0]['s3']['object']['key']
-
+    bucket_name= event['bucket']
+    object_key = event['input_file']
+    out_object_key = event['output_file']
+    print("bucket_name :","'"+bucket_name+"'")
+    print("object_key :","'"+object_key+"'")
+    print("out_object_key :","'"+out_object_key+"'")
     # S3에서 입력 파일 읽기
     input_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
     input_data = json.loads(input_obj['Body'].read().decode('utf-8'))    #local_file_path = '/tmp/' + object_key.split('/')[-1]
@@ -76,7 +78,8 @@ def lambda_handler(event):
     df = pd.DataFrame(input_data['news'])
     data=df
     # local_test 모델 로드
-    model_path = './model_file'
+    model_path = "../models/kpf-sbert/model_file"
+
     model = load_model(model_path)
 
     # 카테고리 별 클러스터링 수행
@@ -94,30 +97,22 @@ def lambda_handler(event):
    
 
     # 결과 파일을 S3에 업로드
-    output_object_key = 'clustered/' + object_key.split('/')[-1]
     output_json = json.dumps(outdata, ensure_ascii=False)
 
 
     # S3에 결과 파일 쓰기
-    s3.put_object(Body=output_json, Bucket=bucket_name, Key=object_key)
+    s3.put_object(Body=output_json, Bucket=bucket_name, Key=out_object_key)
 
     return {
         'statusCode': 200,
         'body': 'File processed and uploaded successfully.'
     }
 # Example event data
-test_event = {
-    'Records': [
-        {
-            's3': {
-                'bucket': {'name': 'aniop2023'},
-                'object': {'key': 'manual_predicted_news_articles.json'}
-            }
-        }
-    ]
-}
-# Execute the function
-result = lambda_handler(test_event)
+test_event = {'bucket': 'aniop2023', 
+                  'input_file': 'manual_predicted_news_articles.json', 
+                  'output_file': 'manual_predicted_news_articles.json'}
 
-# Print the results
-print(result)
+if __name__ == "__main__":
+    result=lambda_handler(test_event)
+    print("clustered success")
+    print(result)
