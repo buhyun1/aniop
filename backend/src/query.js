@@ -11,10 +11,10 @@ async function getArticles(db) {
     }
 }
 
-async function getArticlesByDate(db, date) {
+async function getArticlesByDate(db, startDate, endDate) {
     try {
-        const query = 'SELECT Title, content FROM Articles WHERE publish_date = ?';
-        const [rows] = await db.query(query, [date]);
+        const query = 'SELECT Title, Body, PublishedDate FROM Articles WHERE PublishedDate BETWEEN ? AND ?';
+        const [rows] = await db.query(query, [startDate, endDate]);
         return rows;
     } catch (err) {
         console.error('Error executing query:', err.stack);
@@ -24,7 +24,7 @@ async function getArticlesByDate(db, date) {
 
 async function getArticleById(db, articleId) {
     try {
-        const query = 'SELECT Title, ArticleLink, Body FROM Articles WHERE ArticleID = ?';
+        const query = 'SELECT Title, ArticleLink, Body, Source, PublishedDate FROM Articles WHERE ArticleID = ?'; 
         const [rows] = await db.query(query, [articleId]);
         return rows[0]; // 결과가 하나의 기사 정보이므로 첫 번째 요소 반환
     } catch (err) {
