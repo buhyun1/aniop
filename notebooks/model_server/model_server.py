@@ -39,8 +39,8 @@ def create_item(item: Item):
         item_dict.update({"price_with_tax": price_with_tax})
     return item_dict
 
-@app.post("/cluster-news")
-async def cluster_news(file: UploadFile = File(...)):
+@app.post("/classfication-news")
+async def cluster_news():
     print("Received file:", file.filename)  # 파일 수신 확인
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as temp_file:
