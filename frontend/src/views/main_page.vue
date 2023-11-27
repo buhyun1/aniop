@@ -1,4 +1,5 @@
 <template>
+<div>
   <menuWidget />
   <div class="center">
     <div class="first">
@@ -10,6 +11,7 @@
       <img class="image" src="@/assets/people.svg" />
     </div>
   </div>
+</div>
 </template>
 
 <script>

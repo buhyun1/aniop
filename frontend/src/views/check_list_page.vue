@@ -108,8 +108,8 @@
       <div v-show="currentTab === 1" class="tab-content-box">
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
+            전략의 변화.. 디지털전환과 디지털트윈
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -126,8 +126,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
+            전략의 변화.. 디지털전환과 디지털트윈
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -144,8 +144,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
+            전략의 변화.. 디지털전환과 디지털트윈
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -162,8 +162,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
+            전략의 변화.. 디지털전환과 디지털트윈
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -180,8 +180,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
+            전략의 변화.. 디지털전환과 디지털트윈
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -201,8 +201,8 @@
       <div v-show="currentTab === 2" class="tab-content-box">
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
+            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -219,8 +219,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
+            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -237,8 +237,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
+            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -255,8 +255,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
+            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -273,8 +273,8 @@
         </div>
         <div class="news-content">
           <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
+            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
+            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
           </h3>
           <p>
             &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
@@ -291,7 +291,7 @@
         </div>
       </div>
     </div>
-    <div><button class="complete">완료2</button></div>
+    <div><button class="complete">완료</button></div>
   </div>
 </template>
   
@@ -335,9 +335,6 @@ export default {
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
-  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.5),
-    5px 5px 10px rgba(170, 170, 204, 0.25),
-    10px 10px 20px rgba(170, 170, 204, 0.5), -10px -10px 20px #ffffff;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
@@ -369,10 +366,12 @@ export default {
   cursor: pointer;
   margin-right: 200px;
   font-size: 20px;
+  white-space: nowrap; /* 줄 바꿈 방지  추가 */
 }
 
 .active-tab {
   font-size: 24px;
+  font-weight: bold;
 }
 
 .tab-content > div {

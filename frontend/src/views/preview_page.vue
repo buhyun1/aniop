@@ -1,102 +1,100 @@
 <template>
-  <div class="tabs-container">
-    <div class="tab-content">
-      <div class="tab-content-box">
-        <div class="scrollable-content">
-          <div class="news-content">
-            <h3>
-              무스마, Oiltech 그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-            </h3>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-          </div>
-          <div class="news-content">
-            <h3>
-              무스마, Oiltech 그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-            </h3>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-          </div>
-          <div class="news-content">
-            <h3>
-              무스마, Oiltech 그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-            </h3>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-          </div>
-          <div class="news-content">
-            <h3>
-              무스마, Oiltech 그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-            </h3>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-          </div>
-          <div class="news-content">
-            <h3>
-              무스마, Oiltech 그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-            </h3>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-              법령정비추진반 가동
-            </p>
+  <div>
+    <div class="tabs-container">
+      <button class="download">Excel</button>
+      <div class="tab-content">
+        <div class="tab-content-box">
+          <div class="scrollable-content">
+            <div class="news-content">
+              <h3>산업정책</h3>
+              <ul>
+                <li v-for="item in newsItems" :key="item.ArticleID">
+                  <a :href="item.ArticleLink">{{ item.Title }}</a>
+                </li>
+              </ul>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+            </div>
+            <div class="news-content">
+              <h3>건설/조선 디지털화</h3>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+            </div>
+            <div class="news-content">
+              <h3>IT</h3>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+              <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
+                법령정비추진반 가동
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div>
+      <button class="copy">복사</button>
+      <button class="complete">완료</button>
+    </div>
   </div>
-  <div><button class="complete">완료3</button></div>
 </template>
   
 <script>
+import Controller from "@/controller/testController.vue";
+
 export default {
+  mixins: [Controller],
   data() {},
 
   methods: {
@@ -108,18 +106,41 @@ export default {
 </script>
   
 <style scoped>
-  .complete {
+.download {
+  align-self: flex-end; /* 오른쪽 정렬을 위한 스타일 */
+  width: 75px;
+  height: 40px;
+  background-color: #0070ff;
+  border: none;
+  opacity: 0.7;
+  border-radius: 24px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #ffffff;
+}
+.copy {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  bottom: 20%;
+  right: 16.5%;
+  background-color: #0070ff;
+  border: none;
+  opacity: 0.7;
+  border-radius: 32px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #ffffff;
+}
+.complete {
   position: absolute;
   width: 100px;
   height: 50px;
   bottom: 20%;
   right: 10%;
-  background-color: #0070FF;
+  background-color: #0070ff;
   border: none;
   opacity: 0.7;
-  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.5),
-    5px 5px 10px rgba(170, 170, 204, 0.25),
-    10px 10px 20px rgba(170, 170, 204, 0.5), -10px -10px 20px #ffffff;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
@@ -140,6 +161,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 75vh;
+  width: 730px;
 }
 
 .tabs {
