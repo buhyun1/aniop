@@ -168,7 +168,7 @@ bucket_name = 'aniop2023'
 try:
     s3.upload_file(file_name, bucket_name, os.path.basename(file_name))
     # 다운로드 성공 메시지 출력
-    print("S3 파일 다운로드 완료")
+    print("S3 파일 업로드 완료")
 except Exception as e:
     # 다운로드 실패 메시지 출력
-    print(f"S3 파일 다운로드 오류: {str(e)}")
+    print(f"S3 파일 업로드 오류: {str(e)}")

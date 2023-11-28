@@ -33,7 +33,7 @@ except Exception as e:
 data = []
 try:
     #with open(local_file_name, 'r', encoding='utf-8') as json_file:
-    with open('crawler\data\20231121_download.json', 'r', encoding='utf-8') as json_file:
+    with open('crawler\\data\\20231121_download.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
 except Exception as e:
     print(f"JSON 파일 파싱 오류: {str(e)}")
@@ -62,7 +62,7 @@ try:
     cursor = conn.cursor()
 
     # JSON 데이터를 MySQL 데이터베이스에 삽입하는 코드
-    for item in data:
+    for item in data['news']:
         title = item['Title']
         link = item['Link']
         CategoryID = item['Category']
@@ -81,3 +81,5 @@ try:
 except mysql.connector.Error as err:
     # 연결 실패 또는 데이터베이스 작업 오류 메시지 출력
     print(f"MySQL 데이터베이스 오류: {err}")
+
+
