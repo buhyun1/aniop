@@ -17,7 +17,12 @@
 
       <div class="content">
         <div class="tab-content">
-          <component :is="currentTabComponent"></component>
+          <component
+            :is="currentTabComponent"
+            :newsData="newsData"
+            @dataReceived="handleDataReceived"
+            @clickReceived="handleclickReceived"
+          />
         </div>
       </div>
     </div>
@@ -36,12 +41,15 @@ export default {
   },
   data() {
     return {
+      newsData: null,
+
       tabs: [
         { name: "뉴스 클리핑", component: newsCliping },
         { name: "목록 확인", component: checkList },
         { name: "미리 보기", component: preview },
       ],
       activeTab: 0,
+      responseData: null,
       currentTabComponent: "newsCliping",
     };
   },
@@ -52,6 +60,31 @@ export default {
     changeTab(index) {
       this.activeTab = index;
       this.currentTabComponent = this.tabs[index].component;
+    },
+    handleDataReceived(data) {
+      this.newsData = data;
+      this.changeTabToCheckList(); // 목록 확인 탭으로 전환
+    },
+    changeTabToCheckList() {
+      const checkListIndex = this.tabs.findIndex(
+        (tab) => tab.name === "목록 확인"
+      );
+      if (checkListIndex !== -1) {
+        this.currentTabComponent = this.tabs[checkListIndex].component;
+        this.activeTab = checkListIndex; // 활성 탭 인덱스 업데이트
+      }
+    },
+    handleclickReceived() {
+      this.changeTabTopreview(); // 목록 확인 탭으로 전환
+    },
+    changeTabTopreview() {
+      const checkListIndex = this.tabs.findIndex(
+        (tab) => tab.name === "미리 보기"
+      );
+      if (checkListIndex !== -1) {
+        this.currentTabComponent = this.tabs[checkListIndex].component;
+        this.activeTab = checkListIndex; // 활성 탭 인덱스 업데이트
+      }
     },
   },
 };

@@ -106,6 +106,10 @@ export default {
 </script>
   
 <style scoped>
+ul {
+  list-style-type: none; /* 리스트 항목 앞의 점을 없앱니다 */
+  padding: 0; /* 필요한 경우, padding을 제거합니다 */
+}
 .download {
   align-self: flex-end; /* 오른쪽 정렬을 위한 스타일 */
   width: 75px;

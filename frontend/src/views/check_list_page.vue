@@ -11,294 +11,44 @@
         {{ tab.name }}
       </div>
     </div>
-    <div class="tab-content">
-      <div v-show="currentTab === 0" class="tab-content-box">
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 무스마, Oiltech
-            그룹과 인도시장 OSS 서비스 제공을 위한 각서 체결
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-      </div>
-
-      <div v-show="currentTab === 1" class="tab-content-box">
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
-            전략의 변화.. 디지털전환과 디지털트윈
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
-            전략의 변화.. 디지털전환과 디지털트윈
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
-            전략의 변화.. 디지털전환과 디지털트윈
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
-            전략의 변화.. 디지털전환과 디지털트윈
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 조선업계 기술
-            전략의 변화.. 디지털전환과 디지털트윈
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-      </div>
-
-      <div v-show="currentTab === 2" class="tab-content-box">
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
-            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
-            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
-            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
-            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-        <div class="news-content">
-          <h3>
-            <input type="checkbox" id="agreementCheckbox" /> 애플의 실수와
-            실패의 역사, 그냥 버리기엔 너무 아까운 실패들
-          </h3>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-          <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-            법령정비추진반 가동
-          </p>
-        </div>
-      </div>
+    <div class="news-content">
+      <ul>
+        <li
+          v-for="(item, index) in newsData"
+          :key="item.Title"
+          class="news-item"
+        >
+          <div class="checkbox-title-container">
+            <input
+              type="checkbox"
+              class="agreementCheckbox"
+              v-model="checkedItems[index]"
+            />
+            <h3 class="news-title">{{ item.Title }}</h3>
+          </div>
+          <p class="news-summary">{{ item.Body }}</p>
+        </li>
+      </ul>
     </div>
-    <div><button class="complete">완료</button></div>
+    <div v-show="currentTab === 1" class="tab-content-box"></div>
+
+    <div v-show="currentTab === 2" class="tab-content-box"></div>
+    <div>
+      <button class="complete" @click="submitCheckedTitles">완료</button>
+    </div>
   </div>
 </template>
   
   <script>
+import axios from "axios";
+
 export default {
+  props: {
+    newsData: Array,
+  },
   data() {
     return {
+      checkedItems: {},
       currentTab: 0,
       tabs: [
         {
@@ -321,11 +71,79 @@ export default {
     formatContent(content) {
       return content.replace(/\n/g, "<br>");
     },
+    collectCheckedTitles() {
+      return this.newsData
+        .filter((item, index) => this.checkedItems[index])
+        .map((item) => item.Title);
+    },
+    submitCheckedTitles() {
+      const selectedTitles = this.collectCheckedTitles();
+      const payload = {
+        Titles: selectedTitles,
+      };
+
+      axios
+        .post("http://15.164.165.194:3000/api/articles/by-date", payload)
+        .then((response) => {
+          console.log("데이터 전송 성공:", response.data);
+          this.$emit("clickReceived", response.data);
+        })
+        .catch((error) => {
+          console.error("데이터 전송 중 오류 발생:", error);
+        });
+    },
+  },
+  computed: {
+    /*policyItems() {
+      /*산업정책에 대해서만 리스트 재생성
+      return this.newsData.filter((item) => item.CategoryID === 1);
+    },
+    digitalItems() {
+      return this.newsData.filter((item) => item.CategoryID === 2);
+    },
+    itItems() {
+      return this.newsData.filter((item) => item.CategoryID === 3);
+    },*/
   },
 };
 </script>
   
   <style scoped>
+ul,
+li {
+  list-style-type: none; /* 리스트 항목 앞의 점을 없앱니다 */
+  padding: 0; /* 필요한 경우, padding을 제거합니다 */
+}
+.news-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.checkbox-title-container {
+  display: flex;
+  align-items: center;
+}
+
+.agreementCheckbox {
+  margin-right: 10px;
+}
+
+.news-title {
+  margin: 0; /* h3 태그의 기본 마진 제거 */
+}
+
+.news-summary {
+  margin-top: 5px;
+  margin-left: 25px;
+  width: 670px; /* 너비 제한 */
+  white-space: normal; /* 텍스트 줄바꿈 허용 */
+  overflow: hidden; /* 넘치는 내용 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 텍스트 처리 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 표시할 줄의 최대 수 */
+  -webkit-box-orient: vertical;
+}
 .complete {
   position: absolute;
   width: 100px;

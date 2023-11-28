@@ -2,16 +2,58 @@
   <div id="app">
     <div class="period">기간</div>
 
-    <VDatePicker id="left" v-model="date" />
-    <VDatePicker id="right" v-model="date" />
+    <VDatePicker id="left" v-model="startDate" />
+    <VDatePicker id="right" v-model="endDate" />
     <div>
-      <button class="complete">완료</button>
+      <button class="complete" @click="postData">완료</button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+import { format } from "date-fns";
+
+export default {
+  data() {
+    return {
+      startDate: null,
+      endDate: null,
+      responseData: [],
+    };
+  },
+  methods: {
+    postData() {
+      if (new Date(this.startDate) > new Date(this.endDate)) {
+        alert("시작 날짜는 종료 날짜보다 이전이어야 합니다.");
+        return;
+      }
+      const formattedStartDate = this.startDate
+        ? format(this.startDate, "yyyy-MM-dd")
+        : null;
+      const formattedEndDate = this.endDate
+        ? format(this.endDate, "yyyy-MM-dd")
+        : null;
+      const requestData = {
+        startdate: formattedStartDate,
+        enddate: formattedEndDate,
+      };
+
+      axios
+        .post("http://15.164.165.194:3000/api/articles/by-date", requestData)
+        .then((response) => {
+          console.log("데이터 전송 성공:", response.data);
+          this.$emit("dataReceived", response.data);
+
+          /*this.$emit("dataReceived", response.data);
+          this.$emit("changeTab", "목록 확인");*/
+        })
+        .catch((error) => {
+          console.error("데이터 전송 중 오류 발생:", error);
+        });
+    },
+  },
+};
 </script>
 
 <style>
