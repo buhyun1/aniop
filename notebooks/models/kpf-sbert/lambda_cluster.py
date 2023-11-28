@@ -10,10 +10,16 @@ import pandas as pd
 from dotenv import load_dotenv
 
 
-load_dotenv('../../.env')
+load_dotenv('../.env')
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 region_name = os.getenv('REGION_NAME')
+
+#test env loading
+print("aws_access_key_id :",aws_access_key_id)
+print("aws_secret_access_key :",aws_secret_access_key)
+print("region_name :",region_name)
+
 # Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -53,24 +59,32 @@ def cluster_texts_by_category(model, df, category_col='Category', text_col='Titl
     return pd.concat(clustered_data)
 
 def lambda_cluster(event):
-    s3 = boto3.client('s3', 
-                      region_name=region_name, 
-                      aws_access_key_id=aws_secret_access_key, 
-                      aws_secret_access_key=aws_access_key_id)
-    # S3 버킷과 객체 키 추출
-    bucket_name= event['bucket']
-    object_key = event['input_file']
-    out_object_key = event['output_file']
-    print("bucket_name :","'"+bucket_name+"'")
-    print("object_key :","'"+object_key+"'")
-    print("out_object_key :","'"+out_object_key+"'")
-    # S3에서 입력 파일 읽기
-    input_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
-    input_data = json.loads(input_obj['Body'].read().decode('utf-8'))    #local_file_path = '/tmp/' + object_key.split('/')[-1]
 
-    # for local test json path
-    local_file_path = './tmp'
+    try:
+    # S3 클라이언트 초기화
+        s3 = boto3.client('s3', 
+                        region_name=region_name, 
+                        aws_access_key_id=aws_access_key_id, 
+                        aws_secret_access_key=aws_secret_access_key)
+        logger.info("Initialized S3 client.")
+    except Exception as e:
+        logger.error(f"Error initializing S3 client: {e}")
+        raise e
 
+    try:
+        # S3 버킷과 객체 키 추출
+        bucket_name= event['bucket']
+        object_key = event['input_file']
+        out_object_key = event['output_file']
+        logger.info(f"Bucket: {bucket_name}, Input File: {object_key}, Output File: {out_object_key}")
+
+        # S3에서 입력 파일 읽기
+        input_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
+        input_data = json.loads(input_obj['Body'].read().decode('utf-8'))
+        logger.info(f"Successfully read input file from S3: {object_key}")
+    except Exception as e:
+        logger.error(f"Error reading from S3: {e}")
+        raise e
     # 출력 데이터 준비
     outdata = input_data.copy()
     
@@ -78,8 +92,9 @@ def lambda_cluster(event):
     df = pd.DataFrame(input_data['news'])
     data=df
     # local_test 모델 로드
-    model_path = "../models/kpf-sbert/model_file"
-
+    #for docker container
+    model_path = "models/kpf-sbert/model_file"
+    #model_path = "../models/kpf-sbert/model_file"
     model = load_model(model_path)
 
     # 카테고리 별 클러스터링 수행
