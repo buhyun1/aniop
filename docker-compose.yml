@@ -35,6 +35,16 @@ services:
   #     - frontend
   #   networks:
   #     - app-network
+  models:
+    build:
+      context: ./notebooks
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # 필요한 포트 설정
+    networks:
+      - app-network
+
+  
 networks:
   app-network:
     driver: bridge
