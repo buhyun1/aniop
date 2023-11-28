@@ -17,4 +17,7 @@ COPY src/ /app/src/
 ENV PYTHONUNBUFFERED=1
 
 # Command to run the application
-CMD ["python", "./src/main.py"]
+CMD ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "80"]
+
+#Command for craling
+#CMD ["python", "./src/main.py"]
