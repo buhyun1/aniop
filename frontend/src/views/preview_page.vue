@@ -8,30 +8,10 @@
             <div class="news-content">
               <h3>산업정책</h3>
               <ul>
-                <li v-for="item in newsItems" :key="item.ArticleID">
+                <li v-for="item in previewdata" :key="item.Title">
                   <a :href="item.ArticleLink">{{ item.Title }}</a>
                 </li>
               </ul>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
             </div>
             <div class="news-content">
               <h3>건설/조선 디지털화</h3>
@@ -85,21 +65,28 @@
     </div>
     <div>
       <button class="copy">복사</button>
-      <button class="complete">완료</button>
+      <button class="complete" @click="redirectToLoading">완료</button>
     </div>
   </div>
 </template>
   
 <script>
-import Controller from "@/controller/testController.vue";
-
 export default {
-  mixins: [Controller],
-  data() {},
+  props: {
+    previewdata: Array,
+  },
+  data() {
+    return {
+      isLoading: true,
+    };
+  },
 
   methods: {
     formatContent(content) {
       return content.replace(/\n/g, "<br>");
+    },
+    redirectToLoading() {
+      this.$router.push("/loading");
     },
   },
 };

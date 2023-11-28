@@ -11,18 +11,15 @@
         {{ tab.name }}
       </div>
     </div>
-    <div class="news-content">
+    <div v-show="currentTab === 0" class="tab-content-box">
       <ul>
-        <li
-          v-for="(item, index) in newsData"
-          :key="item.Title"
-          class="news-item"
-        >
+        <li v-for="item in policyItems" :key="item.ArticleID" class="news-item">
           <div class="checkbox-title-container">
             <input
               type="checkbox"
               class="agreementCheckbox"
-              v-model="checkedItems[index]"
+              v-model="checkedItems[0][item.ArticleID]"
+              @change="logCheckedItems(item.ArticleID, 0)"
             />
             <h3 class="news-title">{{ item.Title }}</h3>
           </div>
@@ -30,16 +27,46 @@
         </li>
       </ul>
     </div>
-    <div v-show="currentTab === 1" class="tab-content-box"></div>
+    <div v-show="currentTab === 1" class="tab-content-box">
+      <ul>
+        <li v-for="item in digitalItems" :key="item.Title" class="news-item">
+          <div class="checkbox-title-container">
+            <input
+              type="checkbox"
+              class="agreementCheckbox"
+              v-model="checkedItems[1][item.ArticleID]"
+              @change="logCheckedItems(item.ArticleID, 1)"
+            />
+            <h3 class="news-title">{{ item.Title }}</h3>
+          </div>
+          <p class="news-summary">{{ item.Body }}</p>
+        </li>
+      </ul>
+    </div>
 
-    <div v-show="currentTab === 2" class="tab-content-box"></div>
+    <div v-show="currentTab === 2" class="tab-content-box">
+      <ul>
+        <li v-for="item in itItems" :key="item.Title" class="news-item">
+          <div class="checkbox-title-container">
+            <input
+              type="checkbox"
+              class="agreementCheckbox"
+              v-model="checkedItems[2][item.ArticleID]"
+              @change="logCheckedItems(item.ArticleID, 2)"
+            />
+            <h3 class="news-title">{{ item.Title }}</h3>
+          </div>
+          <p class="news-summary">{{ item.Body }}</p>
+        </li>
+      </ul>
+    </div>
     <div>
-      <button class="complete" @click="submitCheckedTitles">완료</button>
+      <button class="complete" @click="submitSelectedArticles">완료</button>
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import axios from "axios";
 
 export default {
@@ -48,7 +75,9 @@ export default {
   },
   data() {
     return {
-      checkedItems: {},
+      selectedArticleIds: [],
+
+      checkedItems: { 0: {}, 1: {}, 2: {} },
       currentTab: 0,
       tabs: [
         {
@@ -71,39 +100,54 @@ export default {
     formatContent(content) {
       return content.replace(/\n/g, "<br>");
     },
-    collectCheckedTitles() {
-      return this.newsData
-        .filter((item, index) => this.checkedItems[index])
-        .map((item) => item.Title);
+    logCheckedItems(articleID, tabNumber) {
+      const isChecked = this.checkedItems[tabNumber][articleID];
+
+      if (isChecked) {
+        // 체크박스가 선택되면 배열에 articleID 추가
+        if (!this.selectedArticleIds.includes(articleID)) {
+          this.selectedArticleIds.push(articleID);
+        }
+      } else {
+        // 체크박스가 해제되면 배열에서 articleID 제거
+        const index = this.selectedArticleIds.indexOf(articleID);
+        if (index !== -1) {
+          this.selectedArticleIds.splice(index, 1);
+        }
+      }
+
+      console.log("Selected Article IDs:", this.selectedArticleIds);
     },
-    submitCheckedTitles() {
-      const selectedTitles = this.collectCheckedTitles();
-      const payload = {
-        Titles: selectedTitles,
+    submitSelectedArticles() {
+      const postData = {
+        articleIds: this.selectedArticleIds,
       };
 
       axios
-        .post("http://15.164.165.194:3000/api/articles/by-date", payload)
+        .post("http://localhost:3000/api/articles/by-ids", postData)
         .then((response) => {
-          console.log("데이터 전송 성공:", response.data);
+          console.log("Response Data:", response.data);
           this.$emit("clickReceived", response.data);
+
+          // 여기서 response.data를 사용할 수 있습니다
         })
         .catch((error) => {
-          console.error("데이터 전송 중 오류 발생:", error);
+          console.error("Error:", error);
         });
     },
   },
   computed: {
-    /*policyItems() {
-      /*산업정책에 대해서만 리스트 재생성
-      return this.newsData.filter((item) => item.CategoryID === 1);
+    policyItems() {
+      return this.newsData.filter((item) => item.CategoryID === 0);
     },
     digitalItems() {
-      return this.newsData.filter((item) => item.CategoryID === 2);
+      return this.newsData.filter(
+        (item) => item.CategoryID === 1 || item.CategoryID === 2
+      );
     },
     itItems() {
       return this.newsData.filter((item) => item.CategoryID === 3);
-    },*/
+    },
   },
 };
 </script>
