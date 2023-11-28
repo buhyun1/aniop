@@ -71,6 +71,7 @@ app.post('/api/articles/by-date', async (req, res) => {
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
     res.json(articles);
+    
   } catch (err) {
     console.error('Error fetching articles by date:', err.stack);
     res.status(500).send('Internal Server Error');
