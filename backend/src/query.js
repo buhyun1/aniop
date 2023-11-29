@@ -22,9 +22,9 @@ async function getArticlesByDate(db, startDate, endDate) {
     }
 }
 
-async function getArticlesByIds(db, articleIds) {
+async function getArticlesByIds(db, articleId) {
     try {
-        const query = 'SELECT ArticleID, Title, ArticleLink, Body, Source, PublishedDate, CategoryID FROM Articles WHERE ArticleID IN (?)'; 
+        const query = 'SELECT ArticleID, Title, ArticleLink, Body, Source, PublishedDate, CategoryID, DailyRelatedArticleCount FROM Articles WHERE ArticleID IN (?)'; 
         const [rows] = await db.query(query, [articleId]);
         return rows; // 여러 기사 정보가 포함된 배열 반환
     } catch (err) {

@@ -47,39 +47,36 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
+app.post('/api/articles/by-ids', async (req, res) => {
+  try {
+    const { articleId } = req.body;
+    if (articleId !== undefined) {
+      const article = await getArticlesByIds(db, articleId);
+      if (article) {
+        res.json(article);
+      } else {
+        res.status(404).send('Article not found');
+      }
+    } else {
+      res.status(400).send('articleId is missing in the request body');
+    }
+  } catch (err) {
+    console.error('Error fetching article by ID:', err.stack);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 app.post('/api/articles/by-date', async (req, res) => {
   const { startdate, enddate } = req.body;
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
     res.json(articles);
-    
+    console.log(res.json(articles));
   } catch (err) {
     console.error('Error fetching articles by date:', err.stack);
     res.status(500).send('Internal Server Error');
   }
 });
-
-app.post('/api/articles/by-ids', async (req, res) => {
-  try {
-    const { articleIds } = req.body; // 배열 형태로 articleIds를 받음
-    if (articleIds && articleIds.length > 0) {
-      const articles = await getArticlesByIds(db, articleIds); // 수정된 함수 사용
-      if (articles.length > 0) {
-        
-        res.json(articles);
-      } else {
-        res.status(404).send('Articles not found');
-      }
-    } else {
-      res.status(400).send('articleIds are missing in the request body');
-    }
-  } catch (err) {
-    console.error('Error fetching articles by IDs:', err.stack);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-
 
 app.get('*', (req, res) => {
   console.log(`GET request received: ${req.path}`);
