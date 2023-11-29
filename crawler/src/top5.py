@@ -42,7 +42,11 @@ cursor = conn.cursor()
 
 # 카테고리 0부터 4까지 반복
 for category_id in range(5):
-    query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
+    query = query = """
+    SELECT ArticleLink FROM Articles 
+    WHERE CategoryID = %s AND (Summary IS NULL OR Summary = '') 
+    ORDER BY DailyRelatedArticleCount DESC LIMIT 5
+    """
     cursor.execute(query, (category_id,))
 
     for (link,) in cursor.fetchall():
@@ -81,6 +85,10 @@ delete_query = "DELETE FROM Articles WHERE Body IS NULL OR Body = ''"
 cursor.execute(delete_query)
 conn.commit()
 print("데이터베이스 커밋 2 완료")
+
+desc_query ="SELECT * FROM Articles ORDER BY DailyRelatedArticleCount DESC;"
+cursor.execute(desc_query)
+conn.commit()
 
 # 연결 종료
 cursor.close()
