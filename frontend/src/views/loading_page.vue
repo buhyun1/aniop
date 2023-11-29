@@ -5,6 +5,17 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    // 로딩 후 3초 후에 홈 페이지로 이동
+    setTimeout(() => {
+      this.$router.push("/");
+    }, 3000);
+  },
+};
+</script>
+
 <style>
 .mid {
   display: flex;
@@ -20,6 +31,15 @@
 .logo {
   width: 90px;
   height: 90px;
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .aniop {
   margin-top: 20px;

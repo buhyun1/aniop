@@ -22,15 +22,16 @@ async function getArticlesByDate(db, startDate, endDate) {
     }
 }
 
-async function getArticleById(db, articleId) {
+async function getArticlesByIds(db, articleId) {
     try {
-        const query = 'SELECT Title, ArticleLink, Body, Source, PublishedDate FROM Articles WHERE ArticleID = ?'; 
+        const query = 'SELECT ArticleID, Title, ArticleLink, Body, Source, PublishedDate, CategoryID, DailyRelatedArticleCount FROM Articles WHERE ArticleID IN (?)'; 
         const [rows] = await db.query(query, [articleId]);
-        return rows[0]; // 결과가 하나의 기사 정보이므로 첫 번째 요소 반환
+        return rows; // 여러 기사 정보가 포함된 배열 반환
     } catch (err) {
         console.error('Error executing query:', err.stack);
         throw err;
     }
 }
 
-module.exports = { getArticles, getArticlesByDate, getArticleById };
+
+module.exports = { getArticles, getArticlesByDate, getArticlesByIds };

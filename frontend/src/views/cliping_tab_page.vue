@@ -20,6 +20,7 @@
           <component
             :is="currentTabComponent"
             :newsData="newsData"
+            :previewdata="previewdata"
             @dataReceived="handleDataReceived"
             @clickReceived="handleclickReceived"
           />
@@ -42,6 +43,7 @@ export default {
   data() {
     return {
       newsData: null,
+      previewdata: null,
 
       tabs: [
         { name: "뉴스 클리핑", component: newsCliping },
@@ -74,8 +76,9 @@ export default {
         this.activeTab = checkListIndex; // 활성 탭 인덱스 업데이트
       }
     },
-    handleclickReceived() {
-      this.changeTabTopreview(); // 목록 확인 탭으로 전환
+    handleclickReceived(data) {
+      this.previewdata = data;
+      this.changeTabTopreview(); // 미리 보기 탭으로 전환
     },
     changeTabTopreview() {
       const checkListIndex = this.tabs.findIndex(

@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 const mysql = require('mysql2/promise');
 const express = require('express');
-const { getArticles, getArticlesByDate, getArticleById } = require('./query'); // query.js 모듈 가져오기
+const { getArticles, getArticlesByDate, getArticlesByIds } = require('./query'); // query.js 모듈 가져오기
 const cors = require('cors');
 const app = express();
 const path = require('path');
@@ -47,11 +47,11 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
-app.post('/api/articles/by-id', async (req, res) => {
+app.post('/api/articles/by-ids', async (req, res) => {
   try {
     const { articleId } = req.body;
     if (articleId !== undefined) {
-      const article = await getArticleById(db, articleId);
+      const article = await getArticlesByIds(db, articleId);
       if (article) {
         res.json(article);
       } else {
@@ -71,7 +71,7 @@ app.post('/api/articles/by-date', async (req, res) => {
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
     res.json(articles);
-    
+    // console.log(res.json(articles));
   } catch (err) {
     console.error('Error fetching articles by date:', err.stack);
     res.status(500).send('Internal Server Error');

@@ -40,7 +40,7 @@ export default {
       };
 
       axios
-        .post("http://15.164.165.194:3000/api/articles/by-date", requestData)
+        .post("http://localhost:3000/api/articles/by-date", requestData)
         .then((response) => {
           console.log("데이터 전송 성공:", response.data);
           this.$emit("dataReceived", response.data);
@@ -68,7 +68,7 @@ export default {
   width: 100px;
   height: 50px;
   bottom: 20%;
-  right: 10%;
+  right: 18%;
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
