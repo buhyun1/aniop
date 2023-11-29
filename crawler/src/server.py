@@ -8,6 +8,7 @@ import uvicorn
 
 from s3_upload import crawler
 from s3_download import download
+from top5 import select_top5
 import logging
 import requests
 
@@ -32,13 +33,22 @@ async def create_upload_file():
         
        #try except block
         try:
+            print("clustered", clustered_file_name)
             await download(clustered_file_name)
 
-            return {"message": "File processed successfully"}
-        except(Exception):
-            print("File processed failed", Exception)
+        except(Exception) as e:
+            logging.error(f"Error processing file {clustered_file_name}: {e}")
             return {"message": "File processed failed"}
         
+        try:
+            #for select top5 articles
+            select_top5()
+            print("File processed successfully")
+            return {"message": f"File {clustered_file_name} processed successfully"}
+        except Exception as e:
+            logging.error(f"Error processing file {clustered_file_name}: {e}")
+            return {"message": "File processed failed"}
+
     except Exception as e:
         logging.error(f"Crawling failed: {e}")
 
