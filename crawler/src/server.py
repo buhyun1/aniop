@@ -21,22 +21,27 @@ async def create_upload_file():
         #for docker container
         #requests.get(f'http://models:80/processML/{file_name}')
         #for local
-        response=requests.get(f'http://localhost:80/processML/{file_name}')
-        print(response.json())
-        return {"message": "File processed successfully"}
+
+        try:
+            response=requests.get(f'http://localhost:80/processML/{file_name}')
+            data=response.json()
+            clustered_file_name=data["clustered_file_name"]
+        except Exception as e:
+            logging.error(f"Error processing file {file_name}: {e}")
+            return {"message": f"Error processing file {file_name}"}
+        
+       #try except block
+        try:
+            await download(clustered_file_name)
+
+            return {"message": "File processed successfully"}
+        except(Exception):
+            print("File processed failed", Exception)
+            return {"message": "File processed failed"}
+        
     except Exception as e:
         logging.error(f"Crawling failed: {e}")
 
         print("File processed failed", Exception)
         return {"message": "File processed failed"}
     
-@app.get("/download/{clustered_file_name}")
-async def download_file(clustered_file_name: str):
-    #try except block
-    try:
-        await download(clustered_file_name)
-
-        return {"message": "File processed successfully"}
-    except(Exception):
-        print("File processed failed", Exception)
-        return {"message": "File processed failed"}

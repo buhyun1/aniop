@@ -33,11 +33,12 @@ async def process_file(file_name: str):
         print("check_s3.py 실행완료")
         
         #requests.get(f"http://crawler:8080/download/{clustered_file_name}")
-        requests.get(f"http://localhost:8080/download/{clustered_file_name}")
         print("clustered", clustered_file_name)
         print("download.py 실행")
 
-        return {"message": f"File {file_name} processed successfully"}
+        return {"message": f"File {clustered_file_name} processed successfully",
+                "clustered_file_name": clustered_file_name}
+                
 
 
     except Exception as e:
