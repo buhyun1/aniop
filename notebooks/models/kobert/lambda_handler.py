@@ -52,6 +52,8 @@ def lambda_handler(event, context):
     model, tokenizer = load_model('models/kobert/model.pth', 4)
 
     # 출력 데이터 준비
+
+   # 출력 데이터 준비
     outdata = input_data.copy()
     
     for article in outdata['news']:
@@ -75,8 +77,8 @@ def lambda_handler(event, context):
 # 로컬 테스트
 if __name__ == "__main__":
     test_event = {'bucket': 'aniop2023', 
-                  'input_file': 'manual_predicted_news_articles.json', 
-                  'output_file': 'manual_predicted_news_articles.json'}
+                  'input_file': '20231122_combined_news.json', 
+                  'output_file': '20231122_combined_news_2.json'}
     test_context = None
     result = lambda_handler(test_event, test_context)
     print(result)
