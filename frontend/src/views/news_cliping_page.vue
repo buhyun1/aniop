@@ -40,7 +40,7 @@ export default {
       };
 
       axios
-        .post("http://15.164.165.194:3000/api/articles/by-date", requestData)
+        .post("http://localhost:3000/api/articles/by-date", requestData)
         .then((response) => {
           console.log("데이터 전송 성공:", response.data);
           this.$emit("dataReceived", response.data);

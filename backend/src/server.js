@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 const mysql = require('mysql2/promise');
 const express = require('express');
-const { getArticles, getArticlesByDate, getArticleById } = require('./query'); // query.js 모듈 가져오기
+const { getArticles, getArticlesByDate, getArticlesByIds } = require('./query'); // query.js 모듈 가져오기
 const cors = require('cors');
 const app = express();
 const path = require('path');
@@ -61,19 +61,19 @@ app.post('/api/articles/by-date', async (req, res) => {
 
 app.post('/api/articles/by-id', async (req, res) => {
   try {
-    const { articleId } = req.body;
-    if (articleId !== undefined) {
-      const article = await getArticleById(db, articleId);
-      if (article) {
-        res.json(article);
+    const { articleIds } = req.body; // 배열 형태로 articleIds를 받음
+    if (articleIds && articleIds.length > 0) {
+      const articles = await getArticlesByIds(db, articleIds); // 수정된 함수 사용
+      if (articles.length > 0) {
+        res.json(articles);
       } else {
-        res.status(404).send('Article not found');
+        res.status(404).send('Articles not found');
       }
     } else {
-      res.status(400).send('articleId is missing in the request body');
+      res.status(400).send('articleIds are missing in the request body');
     }
   } catch (err) {
-    console.error('Error fetching article by ID:', err.stack);
+    console.error('Error fetching articles by IDs:', err.stack);
     res.status(500).send('Internal Server Error');
   }
 });

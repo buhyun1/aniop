@@ -22,7 +22,7 @@ async function getArticlesByDate(db, startDate, endDate) {
     }
 }
 
-async function getArticleById(db, articleId) {
+async function getArticlesByIds(db, articleIds) {
     try {
         const query = 'SELECT ArticleID, Title, ArticleLink, Body, Source, PublishedDate, CategoryID FROM Articles WHERE ArticleID IN (?)'; 
         const [rows] = await db.query(query, [articleId]);
@@ -33,4 +33,5 @@ async function getArticleById(db, articleId) {
     }
 }
 
-module.exports = { getArticles, getArticlesByDate, getArticleById };
+
+module.exports = { getArticles, getArticlesByDate, getArticlesByIds };
