@@ -61,7 +61,19 @@
       </ul>
     </div>
     <div>
+      <button v-on:click="modalOpen = true" class="wordcloud">
+        워드클라우드
+      </button>
       <button class="complete" @click="submitSelectedArticles">완료</button>
+    </div>
+  </div>
+  <div class="black-bg" v-if="modalOpen === true">
+    <div class="white-bg">
+      <h3>상품 제목입니다.</h3>
+      <p>상품 설명입니다.</p>
+      <button v-on:click="modalOpen = false" class="modal-exit-btn">
+        닫기
+      </button>
     </div>
   </div>
 </template>
@@ -76,6 +88,7 @@ export default {
   data() {
     return {
       selectedArticleIds: [],
+      modalOpen: false,
 
       checkedItems: { 0: {}, 1: {}, 2: {} },
       currentTab: 0,
@@ -192,8 +205,8 @@ li {
   position: absolute;
   width: 100px;
   height: 50px;
-  bottom: 20%;
-  right: 10%;
+  bottom: 10%;
+  right: 26%;
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
@@ -243,6 +256,57 @@ li {
 
 .tab-content > div.show {
   display: block;
+}
+
+.wordcloud {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  bottom: 10%;
+  right: 32.5%;
+  background-color: #0070ff;
+  border: none;
+  opacity: 0.7;
+  border-radius: 32px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.agreementCheckbox {
+  margin-right: 10px;
+  width: 16px; /* Set the width of the checkbox */
+  height: 16px; /* Set the height of the checkbox */
+}
+
+.black-bg {
+  position: fixed;
+  top: 0;
+  left: 20%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* 다른 요소 위에 나타나도록 하는 z-index 설정 */
+}
+
+.white-bg {
+  background-color: #fff;
+  opacity: 0.8;
+  padding: 20px;
+  width: 1200px;
+  height: 600px;
+  text-align: center;
+}
+
+.modal-exit-btn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #0070ff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
 </style>
   

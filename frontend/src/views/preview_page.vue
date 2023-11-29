@@ -1,40 +1,46 @@
 <template>
   <div>
     <div class="tabs-container">
-      <button class="download">Excel</button>
       <div class="tab-content">
         <div class="tab-content-box">
           <div class="scrollable-content">
             <div class="news-content">
               <h3>산업정책</h3>
-              <ul>
-                <li v-for="item in policyItems" :key="item.Title">
-                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
-                </li>
-              </ul>
+              <div>
+                <div v-for="item in policyItems" :key="item.ArticleID">
+                  <a :href="item.ArticleLink" target="_blank">{{
+                    item.Title
+                  }}</a>
+                </div>
+              </div>
             </div>
             <div class="news-content">
               <h3>건설/조선 디지털화</h3>
-              <ul>
-                <li v-for="item in digitalItems" :key="item.Title">
-                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
-                </li>
-              </ul>
+              <div>
+                <div v-for="item in digitalItems" :key="item.ArticleID">
+                  <a :href="item.ArticleLink" target="_blank">{{
+                    item.Title
+                  }}</a>
+                </div>
+              </div>
             </div>
             <div class="news-content">
               <h3>IT</h3>
-              <ul>
-                <li v-for="item in itItem" :key="item.Title">
-                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
-                </li>
-              </ul>
+              <div>
+                <div v-for="item in itItems" :key="item.ArticleID">
+                  <a :href="item.ArticleLink" target="_blank">{{
+                    item.Title
+                  }}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div>
-      <button class="copy">복사</button>
+      <button class="copy" @click="selectScrollableContent">복사</button>
+
       <button class="complete" @click="redirectToLoading">완료</button>
     </div>
   </div>
@@ -52,6 +58,30 @@ export default {
   },
 
   methods: {
+    selectScrollableContent() {
+      const content = this.$el.querySelector(".scrollable-content");
+      let range;
+      if (document.body.createTextRange) {
+        // 대부분의 IE 브라우저에서
+        range = document.body.createTextRange();
+        range.moveToElementText(content);
+        range.select();
+      } else if (window.getSelection) {
+        // 대부분의 비-IE 브라우저에서
+        const selection = window.getSelection();
+        range = document.createRange();
+        range.selectNodeContents(content);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      try {
+        document.execCommand("copy"); // 선택된 텍스트를 클립보드에 복사
+        alert("복사되었습니다!"); // 성공 알림
+      } catch (err) {
+        console.error("복사 실패:", err);
+      }
+    },
     formatContent(content) {
       return content.replace(/\n/g, "<br>");
     },
@@ -77,27 +107,15 @@ export default {
   
 <style scoped>
 ul {
-  list-style-type: none; /* 리스트 항목 앞의 점을 없앱니다 */
-  padding: 0; /* 필요한 경우, padding을 제거합니다 */
-}
-.download {
-  align-self: flex-end; /* 오른쪽 정렬을 위한 스타일 */
-  width: 75px;
-  height: 40px;
-  background-color: #0070ff;
-  border: none;
-  opacity: 0.7;
-  border-radius: 24px;
-  font-weight: bold;
-  font-size: 15px;
-  color: #ffffff;
+  list-style-type: none;
+  padding: 0;
 }
 .copy {
   position: absolute;
   width: 100px;
   height: 50px;
   bottom: 20%;
-  right: 16.5%;
+  right: 28.5%;
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
@@ -111,7 +129,7 @@ ul {
   width: 100px;
   height: 50px;
   bottom: 20%;
-  right: 10%;
+  right: 22%;
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
@@ -135,7 +153,7 @@ ul {
   align-items: center;
   justify-content: center;
   height: 75vh;
-  width: 900px;
+  width: 1100px;
 }
 
 .tabs {
