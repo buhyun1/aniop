@@ -68,7 +68,7 @@ export default {
   width: 100px;
   height: 50px;
   bottom: 20%;
-  right: 10%;
+  right: 18%;
   background-color: #0070ff;
   border: none;
   opacity: 0.7;
