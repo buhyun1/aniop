@@ -12,7 +12,10 @@ def download(clustered_file_name):
 
     today = (datetime.today() - timedelta(days=1)).strftime('%Y%m%d')
     name = f'{today}_combined_news.json'
-    down_name = f'crawler/data/{today}_download.json'
+    #for docker
+    #down_name = f'crawler/data/{today}_download.json'
+
+    down_name = f'./data/{today}_download.json'
 
     # 추가: AWS 자격 증명 및 S3 설정
     aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
@@ -71,9 +74,21 @@ def download(clustered_file_name):
             link = item['Link']
             CategoryID = item['Category']
             DailyRelatedArticleCount = item['HDBSCAN_Cluster']
+
+            #test용 쿼리
+            # ArticleLink를 기준으로 중복 확인
+            check_query = "SELECT COUNT(*) FROM Articles WHERE ArticleLink = %s"
+            cursor.execute(check_query, (link,))
+            (count,) = cursor.fetchone()
+
+            if count == 0:
+                # 중복되지 않은 경우, 데이터 삽입
+                insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
+                cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
+
             # INSERT 쿼리 실행
-            insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
-            cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
+            # insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
+            # cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
 
         # 변경 사항을 커밋
         conn.commit()
