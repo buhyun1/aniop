@@ -120,7 +120,7 @@ export default {
     },
     submitSelectedArticles() {
       const postData = {
-        articleIds: this.selectedArticleIds,
+        articleId: this.selectedArticleIds,
       };
 
       axios

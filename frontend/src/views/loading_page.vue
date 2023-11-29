@@ -5,6 +5,17 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    // 로딩 후 3초 후에 홈 페이지로 이동
+    setTimeout(() => {
+      this.$router.push("/");
+    }, 3000);
+  },
+};
+</script>
+
 <style>
 .mid {
   display: flex;
