@@ -24,8 +24,13 @@ async function getArticlesByDate(db, startDate, endDate) {
 
 async function getArticlesByIds(db, articleIds) {
     try {
+<<<<<<< HEAD
         const query = 'SELECT Title, ArticleLink, Body, Source, PublishedDate FROM Articles WHERE ArticleID IN (?)'; 
         const [rows] = await db.query(query, [articleIds]);
+=======
+        const query = 'SELECT ArticleID, Title, ArticleLink, Body, Source, PublishedDate, CategoryID FROM Articles WHERE ArticleID IN (?)'; 
+        const [rows] = await db.query(query, [articleId]);
+>>>>>>> b069dac2b8b51c1380dc378a2061c5858b828736
         return rows; // 여러 기사 정보가 포함된 배열 반환
     } catch (err) {
         console.error('Error executing query:', err.stack);
