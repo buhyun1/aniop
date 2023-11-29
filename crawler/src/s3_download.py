@@ -5,7 +5,8 @@ import json
 import boto3
 from datetime import datetime, timedelta
 
-def download():
+def download(clustered_file_name):
+    print("clustered_file_name:", clustered_file_name,"with download function")
     # .env 파일 로드
     load_dotenv()
 
@@ -17,7 +18,7 @@ def download():
     aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
     aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
     bucket_name = 'aniop2023'
-    object_name = name
+    object_name = clustered_file_name
     local_file_name = down_name
 
     # 추가: S3에서 파일 다운로드
@@ -86,3 +87,12 @@ def download():
         print(f"MySQL 데이터베이스 오류: {err}")
 
 
+def main():
+    # Example clustered file name
+    clustered_file_name = "20231128_combined_news_3.json"
+
+    # Call the download function with the clustered file name
+    download(clustered_file_name)
+
+if __name__ == "__main__":
+    main()

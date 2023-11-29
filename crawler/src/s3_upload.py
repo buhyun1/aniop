@@ -136,15 +136,18 @@ async def crawler():
             "Link": row['Link']
         }
         data["news"].append(news_item)
+    #for docker
+    #json_filename = f'src/data/{today}_combined_news.json'
 
-    json_filename = f'src/data/{today}_combined_news.json'
+    #for local
+    json_filename = f'./data/{today}_combined_news.json'
     try:
         # JSON 파일 저장
         with open(json_filename, 'w', encoding='utf-8') as json_file:
             json.dump(data, json_file, ensure_ascii=False, indent=2)
         print(f"Successfully saved combined news to {json_filename}")
     except Exception as e:
-        print(f"Error saving combined news to {json_filename}: {e}")
+        print(f"Error saving combined news to {q}: {e}")
 
     # Record end time and calculate elapsed time
     end_time = time.time()
@@ -171,7 +174,8 @@ async def crawler():
         s3.upload_file(file_name, bucket_name, os.path.basename(file_name))
         # 다운로드 성공 메시지 출력
         print("S3 파일 업로드 완료")
-        return file_name
+        logging.info(f"Uploaded {file_name} to S3 bucket {bucket_name} as {file_name[9:]}")
+        return file_name[9:]
         #models 컨테이너에 get 요청
     except Exception as e:
         # 다운로드 실패 메시지 출력

@@ -2,9 +2,10 @@ from fastapi import FastAPI
 import pandas as pd
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
-from .check_s3 import main
+from check_s3 import main
 import sys
 import requests
+import logging
 app = FastAPI()
 
 # Add CORSMiddleware to your FastAPI application
@@ -27,12 +28,17 @@ async def startup_event():
 @app.get("/processML/{file_name}")
 async def process_file(file_name: str):
     try:
-        await main(file_name)
-        print("check_s3.py 실행")
+        print("file_name", file_name)
+        clustered_file_name=main(file_name)
+        print("check_s3.py 실행완료")
+        
+        #requests.get(f"http://crawler:8080/download/{clustered_file_name}")
+        requests.get(f"http://localhost:8080/download/{clustered_file_name}")
+        print("clustered", clustered_file_name)
+        print("download.py 실행")
 
         return {"message": f"File {file_name} processed successfully"}
-        await requests.get('http://crawler:8080/download/')
-        print("download.py 실행")
+
 
     except Exception as e:
         logging.error(f"Error processing file {file_name}: {e}")

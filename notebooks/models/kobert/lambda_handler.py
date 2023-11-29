@@ -7,9 +7,9 @@ import os
 from dotenv import load_dotenv
 
 # .env 파일 로드
-#load_dotenv('../.env')
+load_dotenv('../.env')
 #for docker path
-load_dotenv('.env')
+#load_dotenv('.env')
 
 # 환경 변수 가져오기
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
@@ -33,6 +33,7 @@ def predict(model, tokenizer, input_text):
     return probabilities.numpy()
 
 def lambda_handler(event, context):
+    print("event:", event)
     s3 = boto3.client('s3', 
                       region_name=region_name, 
                   aws_access_key_id=aws_access_key_id, 
@@ -46,10 +47,10 @@ def lambda_handler(event, context):
     # S3에서 입력 파일 읽기
     input_obj = s3.get_object(Bucket=bucket, Key=input_file_key)
     input_data = json.loads(input_obj['Body'].read().decode('utf-8'))
-
-    #model, tokenizer = load_model("../models/kobert/model.pth", 4)
+    # for local test
+    model, tokenizer = load_model("../models/kobert/model.pth", 4)
     #for docker container
-    model, tokenizer = load_model('models/kobert/model.pth', 4)
+    #model, tokenizer = load_model('models/kobert/model.pth', 4)
 
     # 출력 데이터 준비
     outdata = input_data.copy()
