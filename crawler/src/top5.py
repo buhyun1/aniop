@@ -38,52 +38,53 @@ def summarize_news(news_body):
         result_text = completion.choices[0].message.content
     return result_text
 
-# 데이터베이스 연결 설정
-conn = mysql.connector.connect(host=host, user=user, passwd=password, database=database)
-cursor = conn.cursor()
-print("데이터베이스 연결 성공")
+def select_top5():
+    # 데이터베이스 연결 설정
+    conn = mysql.connector.connect(host=host, user=user, passwd=password, database=database)
+    cursor = conn.cursor()
+    print("데이터베이스 연결 성공")
 
-# 카테고리 0부터 4까지 반복
-for category_id in range(5):
-    query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
-    cursor.execute(query, (category_id,))
-    print(f"Category ID {category_id}: 쿼리 실행 완료")
+    # 카테고리 0부터 4까지 반복
+    for category_id in range(5):
+        query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
+        cursor.execute(query, (category_id,))
+        print(f"Category ID {category_id}: 쿼리 실행 완료")
 
-    for (link,) in cursor.fetchall():
-        try:
-            print(f"기사 링크 처리 중: {link}")
-            response = requests.get(link)
-            print(f"웹 요청 상태 코드: {response.status_code}")
-            soup = BeautifulSoup(response.text, 'html.parser')
-            article_paragraphs = soup.select("div.article_view section p")
-            article_text = '\n'.join([para.text for para in article_paragraphs])
-            content = article_text.strip()
-            print("기사 내용 추출 완료")
+        for (link,) in cursor.fetchall():
+            try:
+                print(f"기사 링크 처리 중: {link}")
+                response = requests.get(link)
+                print(f"웹 요청 상태 코드: {response.status_code}")
+                soup = BeautifulSoup(response.text, 'html.parser')
+                article_paragraphs = soup.select("div.article_view section p")
+                article_text = '\n'.join([para.text for para in article_paragraphs])
+                content = article_text.strip()
+                print("기사 내용 추출 완료")
 
-            # URL에서 날짜 추출
-            match = re.search(r'\d{8}', link)
-            date = match.group() if match else None
-            print(f"날짜 추출: {date}")
+                # URL에서 날짜 추출
+                match = re.search(r'\d{8}', link)
+                date = match.group() if match else None
+                print(f"날짜 추출: {date}")
 
-            # 뉴스 요약
-            summary = summarize_news(content) if content else None
-            print(f"기사 요약 완료: {summary}")
+                # 뉴스 요약
+                summary = summarize_news(content) if content else None
+                print(f"기사 요약 완료: {summary}")
 
-            # 본문, 날짜 및 요약 내용을 데이터베이스에 업데이트
-            if content and date and summary:
-                update_query = "UPDATE Articles SET Body = %s, PublishedDate = %s, Summary = %s WHERE ArticleLink = %s"
-                cursor.execute(update_query, (content, date, summary, link))
-                print('SQL 업데이트 완료')
+                # 본문, 날짜 및 요약 내용을 데이터베이스에 업데이트
+                if content and date and summary:
+                    update_query = "UPDATE Articles SET Body = %s, PublishedDate = %s, Summary = %s WHERE ArticleLink = %s"
+                    cursor.execute(update_query, (content, date, summary, link))
+                    print('SQL 업데이트 완료')
 
-            # 변경 사항을 데이터베이스에 커밋
-            conn.commit()
-            print("데이터베이스 커밋 완료")
-        except Exception as e:
-            print(f"오류 발생: {e}")
-        
+                # 변경 사항을 데이터베이스에 커밋
+                conn.commit()
+                print("데이터베이스 커밋 완료")
+            except Exception as e:
+                print(f"오류 발생: {e}")
+            
 
 
-# 연결 종료
-cursor.close()
-conn.close()
-print("데이터베이스 연결 종료")
+    # 연결 종료
+    cursor.close()
+    conn.close()
+    print("데이터베이스 연결 종료")

@@ -1,3 +1,4 @@
+requests
 fastapi
 uvicorn
 torch == 1.10.0 
@@ -9,8 +10,7 @@ umap-learn
 scikit-learn
 hdbscan
 boto3
-pandas
-python-dotenv
 Datasets == 1.15.1
 Tokenizers == 0.10.3
 huggingface-hub
+cors

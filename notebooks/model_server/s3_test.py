@@ -58,6 +58,6 @@ def del_file_from_bucket(bucket_name, file_name):
         print(f"파일을 삭제하는 중 오류가 발생했습니다: {e}")
 
 
-#see_file_from_bucket("aniop2023","manual_predicted_news_articles_3.json")
+#see_file_from_bucket("aniop2023","20231127_combined_news_3.json")
 #del_file_from_bucket("aniop2023","manual_predicted_news_articles_2.json")
 list_files_in_bucket("aniop2023") #버킷 내부 파일 목록 조회

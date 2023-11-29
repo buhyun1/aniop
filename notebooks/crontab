@@ -1,1 +1,1 @@
-* * * * * python /notebooks/model_server/check_s3.py >> /var/log/cron.log 2>&1
+*/5 * * * * python /model_server/check_s3.py >> /var/log/cron.log 2>&1

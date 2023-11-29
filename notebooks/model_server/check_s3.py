@@ -2,6 +2,7 @@ import boto3
 import os
 import sys
 import logging
+import requests
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s: %(message)s')
@@ -27,9 +28,9 @@ aws_access_key_id = os.getenv('aws_access_key_id')
 aws_secret_access_key = os.getenv('aws_secret_access_key')
 region_name = os.getenv('region_name')
 
-print("cluster aws_access_key_id:", aws_access_key_id)  
-print("cluster aws_secret_access_key:", aws_secret_access_key)
-print("cluster region_name:", region_name)
+# print("cluster aws_access_key_id:", aws_access_key_id)  
+# print("cluster aws_secret_access_key:", aws_secret_access_key)
+# print("cluster region_name:", region_name)
 def list_s3_files(bucket_name, s3_client):
     """List files in an S3 bucket."""
     try:
@@ -76,7 +77,8 @@ def main():
 
     # Load the list of files that have already been processed
     processed_files = load_processed_files(processed_files_path)
-
+    print("processed_files:", processed_files)
+    print("s3_files:", s3_files)
     # Identify new files
     new_files = [file for file in s3_files if file not in processed_files]
     if new_files:

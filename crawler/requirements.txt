@@ -5,3 +5,8 @@ langdetect
 openpyxl
 fastapi
 uvicorn
+boto3
+python-dotenv
+openai
+axios
+mysql-connector-python
