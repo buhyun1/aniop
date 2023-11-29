@@ -104,14 +104,6 @@ for section_name, section_url in section_urls.items():
     news_df = news_df[~news_df['Title'].str.contains('\\[포토\\]|\\[인사\\]|\\[부고\\]|\\[사진\\]|\\[동영상\\]')]
     news_df = news_df[~news_df['Title'].apply(is_english)]
 
-    # Extract article content (you can uncomment this if needed)
-    # with ThreadPoolExecutor(max_workers=10) as executor:
-    #     news_df['Article'] = list(executor.map(extract_article_content, news_df['Link']))
-
-    # Filter out short or empty articles (you can uncomment this if needed)
-    # news_df = news_df[news_df['Article'].str.len() > 50]
-    # news_df = news_df[news_df['Article'].str.strip() != '']
-
     # Save to Excel
     excel_filename = f'{today}_{section_name}_news.xlsx'
     #news_df.to_excel(excel_filename, index=False, engine='openpyxl')
