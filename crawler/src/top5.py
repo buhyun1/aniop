@@ -18,6 +18,9 @@ database = os.getenv('MYSQL_DATABASE')
 
 
 def summarize_news(news_body):
+    #for test in local not in use api_key
+    return news_body[:10]
+
     client = OpenAI(
         # defaults to os.environ.get("OPENAI_API_KEY")
         api_key=os.getenv('api_key'),
@@ -88,3 +91,5 @@ def select_top5():
     cursor.close()
     conn.close()
     print("데이터베이스 연결 종료")
+if __name__ == "__main__":
+    select_top5()
