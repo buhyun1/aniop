@@ -8,56 +8,26 @@
             <div class="news-content">
               <h3>산업정책</h3>
               <ul>
-                <li v-for="item in previewdata" :key="item.Title">
-                  <a :href="item.ArticleLink">{{ item.Title }}</a>
+                <li v-for="item in policyItems" :key="item.Title">
+                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
                 </li>
               </ul>
             </div>
             <div class="news-content">
               <h3>건설/조선 디지털화</h3>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
+              <ul>
+                <li v-for="item in digitalItems" :key="item.Title">
+                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
+                </li>
+              </ul>
             </div>
             <div class="news-content">
               <h3>IT</h3>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;산업재해 자기규율 예방체계 구축...고용부
-                법령정비추진반 가동
-              </p>
+              <ul>
+                <li v-for="item in itItem" :key="item.Title">
+                  <a :href="item.ArticleLink" target="_blank">{{ item.Title }}</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -87,6 +57,19 @@ export default {
     },
     redirectToLoading() {
       this.$router.push("/loading");
+    },
+  },
+  computed: {
+    policyItems() {
+      return this.previewdata.filter((item) => item.CategoryID === 0);
+    },
+    digitalItems() {
+      return this.previewdata.filter(
+        (item) => item.CategoryID === 1 || item.CategoryID === 2
+      );
+    },
+    itItems() {
+      return this.previewdata.filter((item) => item.CategoryID === 3);
     },
   },
 };
@@ -152,7 +135,7 @@ ul {
   align-items: center;
   justify-content: center;
   height: 75vh;
-  width: 730px;
+  width: 900px;
 }
 
 .tabs {
