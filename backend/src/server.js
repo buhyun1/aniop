@@ -47,9 +47,6 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-app.post('/api/articles/by-ids', async (req, res) => {
-=======
 app.post('/api/articles/by-date', async (req, res) => {
   const { startdate, enddate } = req.body;
   try {
@@ -63,7 +60,6 @@ app.post('/api/articles/by-date', async (req, res) => {
 });
 
 app.post('/api/articles/by-id', async (req, res) => {
->>>>>>> b069dac2b8b51c1380dc378a2061c5858b828736
   try {
     const { articleIds } = req.body; // 배열 형태로 articleIds를 받음
     if (articleIds && articleIds.length > 0) {
