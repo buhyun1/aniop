@@ -1,0 +1,8 @@
+flask
+soynlp
+wordcloud
+matplotlib
+boto3
+Pillow
+requests
+beautifulsoup4
