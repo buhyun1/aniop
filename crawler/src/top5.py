@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv
 import re
 from openai import OpenAI
-import openai
 
 # .env 파일 로드 및 환경 변수 로드
 load_dotenv()

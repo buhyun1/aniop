@@ -178,7 +178,8 @@ export default {
   },
 };
 </script>
-  <style scoped>
+
+<style scoped>
 ul,
 li {
   list-style-type: none; /* 리스트 항목 앞의 점을 없앱니다 */

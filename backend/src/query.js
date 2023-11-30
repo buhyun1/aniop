@@ -13,7 +13,7 @@ async function getArticles(db) {
 
 async function getArticlesByDate(db, startDate, endDate) {
     try {
-        const query = 'SELECT Title, Body, PublishedDate, ArticleID, CategoryID FROM Articles WHERE PublishedDate BETWEEN ? AND ?';
+        const query = 'SELECT Title, Body, PublishedDate, ArticleID, CategoryID, DailyRelatedArticleCount FROM Articles WHERE PublishedDate BETWEEN ? AND ?';
         const [rows] = await db.query(query, [startDate, endDate]);
         return rows;
     } catch (err) {
