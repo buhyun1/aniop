@@ -91,7 +91,7 @@ async def crawler():
     }
 
     # Get today's date
-    today = (datetime.today() - timedelta(days=3)).strftime('%Y%m%d')
+    today = (datetime.today() - timedelta(days=1)).strftime('%Y%m%d')
 
     # Record start time
     start_time = time.time()
