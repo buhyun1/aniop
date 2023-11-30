@@ -74,21 +74,9 @@ def download(clustered_file_name):
             link = item['Link']
             CategoryID = item['Category']
             DailyRelatedArticleCount = item['HDBSCAN_Cluster']
-
-            #test용 쿼리
-            # ArticleLink를 기준으로 중복 확인
-            check_query = "SELECT COUNT(*) FROM Articles WHERE ArticleLink = %s"
-            cursor.execute(check_query, (link,))
-            (count,) = cursor.fetchone()
-
-            if count == 0:
-                # 중복되지 않은 경우, 데이터 삽입
-                insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
-                cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
-
-            # INSERT 쿼리 실행
-            # insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
-            # cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
+            #INSERT 쿼리 실행
+            insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
+            cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
 
         # 변경 사항을 커밋
         conn.commit()
