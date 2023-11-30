@@ -151,21 +151,31 @@ export default {
   },
   computed: {
     policyItems() {
-      return this.newsData.filter((item) => item.CategoryID === 0);
+      return this.newsData
+        .filter((item) => item.CategoryID === 0)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
     digitalItems() {
-      return this.newsData.filter(
-        (item) => item.CategoryID === 1 || item.CategoryID === 2
-      );
+      return this.newsData
+        .filter((item) => item.CategoryID === 1 || item.CategoryID === 2)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
     itItems() {
-      return this.newsData.filter((item) => item.CategoryID === 3);
+      return this.newsData
+        .filter((item) => item.CategoryID === 3)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 ul,
 li {
   list-style-type: none; /* 리스트 항목 앞의 점을 없앱니다 */
@@ -309,4 +319,3 @@ li {
   cursor: pointer;
 }
 </style>
-  

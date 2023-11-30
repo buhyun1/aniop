@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import re
 from openai import OpenAI
 
-
 # .env 파일 로드 및 환경 변수 로드
 load_dotenv()
 host = os.getenv('MYSQL_HOST')
