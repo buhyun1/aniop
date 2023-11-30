@@ -13,7 +13,7 @@ import logging
 import requests
 
 sys.path.append("../word_cloud")
-from word_cloud_generater import word_cloud
+from word_cloud_generator import generate_wordcloud_api
 app = FastAPI()
 
 @app.get("/crawling/")
