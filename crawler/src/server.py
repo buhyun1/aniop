@@ -5,13 +5,15 @@ import uvicorn
 # for docker
 # from .s3_upload import crawler
 # from .s3_download import download
-
+import sys
 from s3_upload import crawler
 from s3_download import download
 from top5 import select_top5
 import logging
 import requests
 
+sys.path.append("../word_cloud")
+from word_cloud_generater import word_cloud
 app = FastAPI()
 
 @app.get("/crawling/")
@@ -34,7 +36,7 @@ async def create_upload_file():
        #try except block
         try:
             print("clustered", clustered_file_name)
-            await download(clustered_file_name)
+            download(clustered_file_name)
 
         except(Exception) as e:
             logging.error(f"Error processing file {clustered_file_name}: {e}")
