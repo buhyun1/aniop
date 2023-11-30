@@ -13,7 +13,11 @@
     </div>
     <div v-show="currentTab === 0" class="tab-content-box">
       <ul>
-        <li v-for="item in policyItems" :key="item.ArticleID" class="news-item">
+        <li
+          v-for="item in policyItems"
+          :key="item.ArticleID"
+          class="news-item"
+        >
           <div class="checkbox-title-container">
             <input
               type="checkbox"
@@ -43,7 +47,6 @@
         </li>
       </ul>
     </div>
-
     <div v-show="currentTab === 2" class="tab-content-box">
       <ul>
         <li v-for="item in itItems" :key="item.Title" class="news-item">
@@ -77,11 +80,17 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
-
 export default {
+  watch: {
+    newsData: {
+      handler(newsData) {
+        this.newsDataArticle = newsData.articles;
+      },
+      immediate: true,
+    },
+  },
   props: {
     newsData: Array,
   },
@@ -89,7 +98,6 @@ export default {
     return {
       selectedArticleIds: [],
       modalOpen: false,
-
       checkedItems: { 0: {}, 1: {}, 2: {} },
       currentTab: 0,
       tabs: [
@@ -103,9 +111,9 @@ export default {
           name: "IT",
         },
       ],
+      newsDataArticle: [],
     };
   },
-
   methods: {
     changeTab(index) {
       this.currentTab = index;
@@ -115,7 +123,6 @@ export default {
     },
     logCheckedItems(articleID, tabNumber) {
       const isChecked = this.checkedItems[tabNumber][articleID];
-
       if (isChecked) {
         // 체크박스가 선택되면 배열에 articleID 추가
         if (!this.selectedArticleIds.includes(articleID)) {
@@ -128,21 +135,18 @@ export default {
           this.selectedArticleIds.splice(index, 1);
         }
       }
-
       console.log("Selected Article IDs:", this.selectedArticleIds);
+      console.log("newDataArticle:", this.newDataArticle); // Add this line to log newDataArticle
     },
     submitSelectedArticles() {
       const postData = {
         articleId: this.selectedArticleIds,
       };
-
       axios
         .post("http://localhost:3000/api/articles/by-ids", postData)
         .then((response) => {
           console.log("Response Data:", response.data);
           this.$emit("clickReceived", response.data);
-
-          // 여기서 response.data를 사용할 수 있습니다
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -151,20 +155,29 @@ export default {
   },
   computed: {
     policyItems() {
-      return this.newsData.filter((item) => item.CategoryID === 0);
+      return this.newsDataArticle
+        .filter((item) => item.CategoryID === 0)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
     digitalItems() {
-      return this.newsData.filter(
-        (item) => item.CategoryID === 1 || item.CategoryID === 2
-      );
+      return this.newsDataArticle
+        .filter((item) => item.CategoryID === 1 || item.CategoryID === 2)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
     itItems() {
-      return this.newsData.filter((item) => item.CategoryID === 3);
+      return this.newsDataArticle
+        .filter((item) => item.CategoryID === 3)
+        .sort(
+          (a, b) => b.DailyRelatedArticleCount - a.DailyRelatedArticleCount
+        );
     },
   },
 };
 </script>
-  
   <style scoped>
 ul,
 li {
@@ -176,20 +189,16 @@ li {
   flex-direction: column;
   margin-bottom: 10px;
 }
-
 .checkbox-title-container {
   display: flex;
   align-items: center;
 }
-
 .agreementCheckbox {
   margin-right: 10px;
 }
-
 .news-title {
   margin: 0; /* h3 태그의 기본 마진 제거 */
 }
-
 .news-summary {
   margin-top: 5px;
   margin-left: 25px;
@@ -207,13 +216,13 @@ li {
   height: 50px;
   bottom: 10%;
   right: 26%;
-  background-color: #0070ff;
+  background-color: #0070FF;
   border: none;
   opacity: 0.7;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
-  color: #ffffff;
+  color: #FFFFFF;
 }
 .tab-content-box {
   max-height: 500px;
@@ -230,55 +239,47 @@ li {
   justify-content: center;
   height: 70vh;
 }
-
 .tabs {
   display: flex;
   margin-bottom: 10px;
-  color: #0070ff;
+  color: #0070FF;
 }
-
 .tab {
   cursor: pointer;
   margin-right: 200px;
   font-size: 20px;
   white-space: nowrap; /* 줄 바꿈 방지  추가 */
 }
-
 .active-tab {
   font-size: 24px;
   font-weight: bold;
 }
-
 .tab-content > div {
   margin-right: 30%;
   width: 900px;
 }
-
 .tab-content > div.show {
   display: block;
 }
-
 .wordcloud {
   position: absolute;
   width: 100px;
   height: 50px;
   bottom: 10%;
   right: 32.5%;
-  background-color: #0070ff;
+  background-color: #0070FF;
   border: none;
   opacity: 0.7;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
-  color: #ffffff;
+  color: #FFFFFF;
 }
-
 .agreementCheckbox {
   margin-right: 10px;
   width: 16px; /* Set the width of the checkbox */
   height: 16px; /* Set the height of the checkbox */
 }
-
 .black-bg {
   position: fixed;
   top: 0;
@@ -290,7 +291,6 @@ li {
   justify-content: center;
   z-index: 1000; /* 다른 요소 위에 나타나도록 하는 z-index 설정 */
 }
-
 .white-bg {
   background-color: #fff;
   opacity: 0.8;
@@ -299,14 +299,12 @@ li {
   height: 600px;
   text-align: center;
 }
-
 .modal-exit-btn {
   margin-top: 10px;
   padding: 10px;
-  background-color: #0070ff;
+  background-color: #0070FF;
   color: #fff;
   border: none;
   cursor: pointer;
 }
 </style>
-  

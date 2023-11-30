@@ -76,31 +76,18 @@ app.post('/api/articles/by-date', async (req, res) => {
   const { startdate, enddate } = req.body;
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
-    const data = { news: articles };
-    await axios.post('http://localhost:5000/generate-wordcloud', data)
-      .then(response => {
-        // Combine articles and word cloud image URL in the response
-        const combinedResponse = {
-          articles: articles,
-          wordCloudImageUrl: response.data.image_url
-        };
-
-        console.log("Word Cloud generated image URL:", response.data.image_url);
-        res.json(combinedResponse);
-      })
-      .catch(error => {
-        console.error("An error occurred while generating word cloud:", error);
-        res.status(500).json({ error: "Failed to generate word cloud" });
-      });
-
-
-    // console.log(res.json(articles));
-  } catch (err) {
-    console.error('Error fetching articles by date:', err.stack);
-    res.status(500).send('Internal Server Error');
+    
+    // Combine articles and word cloud image URL in the response
+    const combinedResponse = {
+        articles: articles,
+        wordCloudImageUrl: null
+    };
+    res.json(combinedResponse);
+  } catch (error) {
+    console.error("An error occurred while fetching articles:", error);
+    res.status(500).json({ error: "Failed to fetch articles" });
   }
 });
-
 app.get('*', (req, res) => {
   console.log(`GET request received: ${req.path}`);
   if (!req.path.startsWith('/api')) {    
