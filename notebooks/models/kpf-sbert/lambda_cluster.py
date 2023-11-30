@@ -92,9 +92,10 @@ def lambda_cluster(event):
     df = pd.DataFrame(input_data['news'])
     data=df
     # local_test 모델 로드
+    model_path = "../models/kpf-sbert/model_file"
+    
     #for docker container
-    model_path = "models/kpf-sbert/model_file"
-    #model_path = "../models/kpf-sbert/model_file"
+    #model_path = "models/kpf-sbert/model_file"
     model = load_model(model_path)
 
     # 카테고리 별 클러스터링 수행

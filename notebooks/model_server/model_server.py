@@ -1,14 +1,11 @@
-from fastapi import FastAPI, UploadFile, File
-from pydantic import BaseModel
-import cluster
+from fastapi import FastAPI
 import pandas as pd
-import tempfile
-import shutil
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
-from model_loader import get_model
-
-
+from check_s3 import main
+import sys
+import requests
+import logging
 app = FastAPI()
 
 # Add CORSMiddleware to your FastAPI application
@@ -23,36 +20,27 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    get_model()  # 앱 시작 시 모델 로드
+    print("startup_event")
+    return("startup_event")
 
-class Item(BaseModel):
-    name: str
-    description: str = None
-    price: float
-    tax: float = None
 
-@app.post("/items/")
-def create_item(item: Item):
-    item_dict = item.dict()
-    if item.tax:
-        price_with_tax = item.price + item.tax
-        item_dict.update({"price_with_tax": price_with_tax})
-    return item_dict
 
-@app.post("/classfication-news")
-async def cluster_news():
-    print("Received file:", file.filename)  # 파일 수신 확인
+@app.get("/processML/{file_name}")
+async def process_file(file_name: str):
+    try:
+        print("file_name", file_name)
+        clustered_file_name=main(file_name)
+        print("check_s3.py 실행완료")
+        
+        #requests.get(f"http://crawler:8080/download/{clustered_file_name}")
+        print("clustered", clustered_file_name)
+        print("download.py 실행")
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as temp_file:
-        shutil.copyfileobj(file.file, temp_file)
-        temp_file_path = temp_file.name
-    print("File saved to temporary path:", temp_file_path)  # 임시 파일 저장 경로 출력
+        return {"message": f"File {clustered_file_name} processed successfully",
+                "clustered_file_name": clustered_file_name}
+                
 
-    df = pd.read_excel(temp_file_path)
-    print("Excel file loaded into DataFrame")  # 엑셀 파일 로딩 확인
 
-    output_file_path = 'output_cluster.xlsx'  # 상대 경로 사용 권장
-    saved_file_path = cluster.cluster_news_titles_and_save(df, output_file_path)
-    print("Clustering completed and file saved:", saved_file_path)  # 클러스터링 완료 및 파일 저장 경로 출력
-
-    return {"message": "File processed and saved", "file_path": saved_file_path}
+    except Exception as e:
+        logging.error(f"Error processing file {file_name}: {e}")
+        return {"message": f"Error processing file {file_name}"}
