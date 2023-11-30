@@ -21,12 +21,14 @@ services:
       - "3000:3000"
     networks:
       - app-network
-  # crawler:
-  #   build:
-  #     context: ./crawler
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - app-network
+  crawler:
+    build:
+      context: ./crawler
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
   # nginx:
   #   image: nginx:stable-alpine
   #   ports:
@@ -40,7 +42,7 @@ services:
       context: ./notebooks
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"  # 필요한 포트 설정
+      - "80:80"  # 필요한 포트 설정
     networks:
       - app-network
 

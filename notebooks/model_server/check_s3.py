@@ -2,34 +2,34 @@ import boto3
 import os
 import sys
 import logging
+import requests
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s: %(message)s')
 
-# Add the path of lambda_handler.py to sys.path
-#sys.path.append(os.path.abspath('../models/kobert'))
-#sys.path.append(os.path.abspath("../models/kpf-sbert"))
+#Add the path of lambda_handler.py to sys.path
+sys.path.append(os.path.abspath("../models/kobert"))
+sys.path.append(os.path.abspath("../models/kpf-sbert"))
 
-#for docker container path
-sys.path.append(os.path.abspath("models/kobert"))
-sys.path.append(os.path.abspath("models/kpf-sbert"))
+# #for docker container path
+# sys.path.append(os.path.abspath("models/kobert"))
+# sys.path.append(os.path.abspath("models/kpf-sbert"))
 
 
 from dotenv import load_dotenv
 from lambda_handler import lambda_handler
 from lambda_cluster import lambda_cluster
 # Load environment variables
-#load_dotenv("../.env")
-
+load_dotenv("../.env")
 #for docker container env path
-load_dotenv("./.env")
+#load_dotenv("./.env")
 aws_access_key_id = os.getenv('aws_access_key_id')
 aws_secret_access_key = os.getenv('aws_secret_access_key')
 region_name = os.getenv('region_name')
 
-print("cluster aws_access_key_id:", aws_access_key_id)  
-print("cluster aws_secret_access_key:", aws_secret_access_key)
-print("cluster region_name:", region_name)
+# print("cluster aws_access_key_id:", aws_access_key_id)  
+# print("cluster aws_secret_access_key:", aws_secret_access_key)
+# print("cluster region_name:", region_name)
 def list_s3_files(bucket_name, s3_client):
     """List files in an S3 bucket."""
     try:
@@ -63,7 +63,7 @@ def save_processed_files(processed_files, file_path):
                 file.write(file_name + '\n')
     except Exception as e:
         logging.error(f"Error saving processed files: {e}")
-def main():
+def main(file_name):
     bucket_name = "aniop2023"
     processed_files_path = 'processed_files.txt'
 
@@ -76,9 +76,11 @@ def main():
 
     # Load the list of files that have already been processed
     processed_files = load_processed_files(processed_files_path)
-
+    print("processed_files:", processed_files)
+    print("s3_files:", s3_files)
     # Identify new files
     new_files = [file for file in s3_files if file not in processed_files]
+
     if new_files:
         logging.info(f"New files found: {new_files}")
         # Process each new file
@@ -108,8 +110,9 @@ def main():
             logging.info(f"Processing file {classificated_file_name} for clustering")
             lambda_cluster(event)  # Call the imported lambda_handler function
             logging.info("Clustering completed")
+            return clustered_file_name
     else:
         logging.info("No new files found.")
 
 if __name__ == "__main__":
-    main()
+    main("20231128_combined_news.json")
