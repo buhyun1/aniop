@@ -17,14 +17,13 @@ database = os.getenv('MYSQL_DATABASE')
 
 def summarize_news(news_body):
     #for test in local not in use api_key
-    return news_body[:10]
-
     client = OpenAI(
         # defaults to os.environ.get("OPENAI_API_KEY")
-        api_key=os.getenv('api_key'),
+        api_key=os.getenv('openai.api_key'),
     )
 
     completion = client.chat.completions.create(
+        engine="teamlab-gpt-35-turbo",
         messages=[
             {
                 "role": "user",
