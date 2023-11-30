@@ -77,7 +77,7 @@ app.post('/api/articles/by-date', async (req, res) => {
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
     const data = { news: articles };
-    axios.post('http://localhost:5000/generate-wordcloud', data)
+    await axios.post('http://localhost:5000/generate-wordcloud', data)
       .then(response => {
         // Combine articles and word cloud image URL in the response
         const combinedResponse = {

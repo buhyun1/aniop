@@ -76,18 +76,18 @@ async def crawler():
     # Define section URLs
     section_urls = {
         #"digital": "https://news.daum.net/breakingnews/digital?page=",
-        "society_affair":"https://news.daum.net/breakingnews/society/affair?page=",
-        # "society_others":"https://news.daum.net/breakingnews/society/others?page=",
-        # "society_labor":"https://news.daum.net/breakingnews/society/labor?page=",
-        # "society_environment":"https://news.daum.net/breakingnews/society/environment?page=",
-        # "politics_administration":"https://news.daum.net/breakingnews/politics/administration?page=",
-        # "politics_assembly":"https://news.daum.net/breakingnews/politics/assembly?page=",
-        # "politics_others":"https://news.daum.net/breakingnews/politics/others?page=",
-        # "politics_dipdefen":"https://news.daum.net/breakingnews/politics/dipdefen?page=",
-        # "politics_president":"https://news.daum.net/breakingnews/politics/president?page=",
-        # "economic_industry":"https://news.daum.net/breakingnews/economic/industry?page=",
-        # "economic_others":"https://news.daum.net/breakingnews/economic/others?page=",
-        # "economic_world":"https://news.daum.net/breakingnews/economic/world?page="
+        #"society_affair":"https://news.daum.net/breakingnews/society/affair?page=",
+        #"society_others":"https://news.daum.net/breakingnews/society/others?page=",
+        #"society_labor":"https://news.daum.net/breakingnews/society/labor?page=",
+        #"society_environment":"https://news.daum.net/breakingnews/society/environment?page=",
+        #  "politics_administration":"https://news.daum.net/breakingnews/politics/administration?page=",
+        #  "politics_assembly":"https://news.daum.net/breakingnews/politics/assembly?page=",
+        #  "politics_others":"https://news.daum.net/breakingnews/politics/others?page=",
+        #  "politics_dipdefen":"https://news.daum.net/breakingnews/politics/dipdefen?page=",
+        #  "politics_president":"https://news.daum.net/breakingnews/politics/president?page=",
+        "economic_industry":"https://news.daum.net/breakingnews/economic/industry?page=",
+        #  "economic_others":"https://news.daum.net/breakingnews/economic/others?page=",
+        #"economic_world":"https://news.daum.net/breakingnews/economic/world?page="
     }
 
     # Get today's date
@@ -147,7 +147,7 @@ async def crawler():
             json.dump(data, json_file, ensure_ascii=False, indent=2)
         print(f"Successfully saved combined news to {json_filename}")
     except Exception as e:
-        print(f"Error saving combined news to {q}: {e}")
+        print(f"Error saving combined news to {json_filename}: {e}")
 
     # Record end time and calculate elapsed time
     end_time = time.time()

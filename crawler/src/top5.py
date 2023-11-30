@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import re
 from openai import OpenAI
-
+import openai
 
 # .env 파일 로드 및 환경 변수 로드
 load_dotenv()
@@ -15,13 +15,13 @@ user = os.getenv('MYSQL_USER')
 password = os.getenv('MYSQL_PASSWORD')
 database = os.getenv('MYSQL_DATABASE')
 
+
+
 def summarize_news(news_body):
     #for test in local not in use api_key
-    return news_body[:10]
-
     client = OpenAI(
         # defaults to os.environ.get("OPENAI_API_KEY")
-        api_key=os.getenv('api_key'),
+        api_key=os.getenv('openai.api_key'),
     )
 
     completion = client.chat.completions.create(
@@ -38,33 +38,56 @@ def summarize_news(news_body):
     if completion is not None and completion.choices:
         result_text = completion.choices[0].message.content
     return result_text
+    # try:
+    #     response = openai.ChatCompletion.create(
+    #     engine="teamlab-gpt-35-turbo",
+    #     messages=[
+    #     {
+    #     "role": "user",
+    #     "content": f"Summarize a given article in 100 characters in Korean: {news_body}"
+    #     }
+    #     ],
+    #     temperature=1,
+    #     max_tokens=256,
+    #     top_p=1,
+    #     frequency_penalty=0,
+    #     presence_penalty=0
+    #     )
+    #     result_text = response['choices'][0]['message']['content']
+    #     return result_text
+    
+    # except Exception as e:
+    #     print(f"오류 발생: {e}")
+    #     return None
 
-# 데이터베이스 연결 설정
+
 def select_top5():
+    # 데이터베이스 연결 설정
     conn = mysql.connector.connect(host=host, user=user, passwd=password, database=database)
     cursor = conn.cursor()
+    print("데이터베이스 연결 성공")
 
     # 카테고리 0부터 4까지 반복
     for category_id in range(5):
-        query = query = """
-        SELECT ArticleLink FROM Articles 
-        WHERE CategoryID = %s AND (Summary IS NULL OR Summary = '') 
-        ORDER BY DailyRelatedArticleCount DESC LIMIT 5
-        """
+        query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
         cursor.execute(query, (category_id,))
+        print(f"Category ID {category_id}: 쿼리 실행 완료")
 
         for (link,) in cursor.fetchall():
             try:
                 print(f"기사 링크 처리 중: {link}")
                 response = requests.get(link)
+                print(f"웹 요청 상태 코드: {response.status_code}")
                 soup = BeautifulSoup(response.text, 'html.parser')
                 article_paragraphs = soup.select("div.article_view section p")
                 article_text = '\n'.join([para.text for para in article_paragraphs])
                 content = article_text.strip()
+                print("기사 내용 추출 완료")
 
                 # URL에서 날짜 추출
                 match = re.search(r'\d{8}', link)
                 date = match.group() if match else None
+                print(f"날짜 추출: {date}")
 
                 # 뉴스 요약
                 summary = summarize_news(content) if content else None
@@ -78,18 +101,11 @@ def select_top5():
 
                 # 변경 사항을 데이터베이스에 커밋
                 conn.commit()
-                print("데이터베이스 커밋 1 완료")  
+                print("데이터베이스 커밋 완료")
             except Exception as e:
                 print(f"오류 발생: {e}")
+            
 
-    delete_query = "DELETE FROM Articles WHERE Body IS NULL OR Body = ''"
-    cursor.execute(delete_query)
-    conn.commit()
-    print("데이터베이스 커밋 2 완료")
-
-    desc_query ="SELECT * FROM Articles ORDER BY DailyRelatedArticleCount DESC;"
-    cursor.execute(desc_query)
-    conn.commit()
 
     # 연결 종료
     cursor.close()
