@@ -98,14 +98,20 @@ upload_to_s3(S3_BUCKET_NAME, image_file_name, image_data)
 
 
 ## Flask 애플리케이션으로 변환
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
+import json
 
 app = Flask(__name__)
 
-@app.route('/generate-wordcloud', methods=['GET'])
+@app.route('/generate-wordcloud', methods=['POST'])
 def generate_wordcloud_api():
-    # 데이터 추출 및 워드 클라우드 생성
-    text = extract_titles_from_file('data_test_labeled.json')
+    # JSON 데이터를 요청 본문에서 불러옴
+    data = request.json
+
+    # 제공된 JSON 데이터를 이용하여 텍스트 추출
+    text = extract_titles_from_json(data)
+
+    # 워드 클라우드 생성
     wordcloud_image = generate_wordcloud(text)
 
     # 이미지 파일 이름 설정 (오늘 날짜 포함)
@@ -124,6 +130,14 @@ def generate_wordcloud_api():
     # S3 이미지 URL 반환
     image_url = f'https://{S3_BUCKET_NAME}.s3.amazonaws.com/{image_file_name}'
     return jsonify({'image_url': image_url})
+
+# JSON 데이터에서 제목 추출
+def extract_titles_from_json(json_data):
+    text = ''
+    for article in json_data['news']:
+        if 'Title' in article and article['Title']:
+            text += article['Title'] + ' '
+    return text
 
 if __name__ == '__main__':
     app.run(debug=False)
