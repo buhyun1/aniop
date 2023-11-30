@@ -5,6 +5,7 @@ const { getArticles, getArticlesByDate, getArticlesByIds } = require('./query');
 const cors = require('cors');
 const app = express();
 const path = require('path');
+const axios = require('axios');
 
 let db;
 app.use(cors()); // 모든 출처 허용
@@ -66,11 +67,33 @@ app.post('/api/articles/by-ids', async (req, res) => {
   }
 });
 
+const data = {
+  news: [
+      // 여기에 뉴스 기사 제목과 관련 데이터를 포함
+  ]
+};
 app.post('/api/articles/by-date', async (req, res) => {
   const { startdate, enddate } = req.body;
   try {
     const articles = await getArticlesByDate(db, startdate, enddate);
-    res.json(articles);
+    const data = { news: articles };
+    axios.post('http://localhost:5000/generate-wordcloud', data)
+      .then(response => {
+        // Combine articles and word cloud image URL in the response
+        const combinedResponse = {
+          articles: articles,
+          wordCloudImageUrl: response.data.image_url
+        };
+
+        console.log("Word Cloud generated image URL:", response.data.image_url);
+        res.json(combinedResponse);
+      })
+      .catch(error => {
+        console.error("An error occurred while generating word cloud:", error);
+        res.status(500).json({ error: "Failed to generate word cloud" });
+      });
+
+
     // console.log(res.json(articles));
   } catch (err) {
     console.error('Error fetching articles by date:', err.stack);
