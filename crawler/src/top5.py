@@ -19,46 +19,46 @@ database = os.getenv('MYSQL_DATABASE')
 
 def summarize_news(news_body):
     #for test in local not in use api_key
-    # client = OpenAI(
-    #     # defaults to os.environ.get("OPENAI_API_KEY")
-    #     api_key=os.getenv('api_key'),
-    # )
+    client = OpenAI(
+        # defaults to os.environ.get("OPENAI_API_KEY")
+        api_key=os.getenv('openai.api_key'),
+    )
 
-    # completion = client.chat.completions.create(
-    #     messages=[
-    #         {
-    #             "role": "user",
-    #             "content": f"Summarize a given article in 100 characters in Korean: {news_body}",
-    #         }
-    #     ],
-    #     model="gpt-3.5-turbo",
-    # )
-    # # 요약 추출
-    # # 올바른 응답 데이터 추출 방법
-    # if completion is not None and completion.choices:
-    #     result_text = completion.choices[0].message.content
-    # return result_text
-    try:
-        response = openai.ChatCompletion.create(
-        engine="teamlab-gpt-35-turbo",
+    completion = client.chat.completions.create(
         messages=[
-        {
-        "role": "user",
-        "content": f"Summarize a given article in 100 characters in Korean: {news_body}"
-        }
+            {
+                "role": "user",
+                "content": f"Summarize a given article in 100 characters in Korean: {news_body}",
+            }
         ],
-        temperature=1,
-        max_tokens=256,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-        )
-        result_text = response['choices'][0]['message']['content']
-        return result_text
+        model="gpt-3.5-turbo",
+    )
+    # 요약 추출
+    # 올바른 응답 데이터 추출 방법
+    if completion is not None and completion.choices:
+        result_text = completion.choices[0].message.content
+    return result_text
+    # try:
+    #     response = openai.ChatCompletion.create(
+    #     engine="teamlab-gpt-35-turbo",
+    #     messages=[
+    #     {
+    #     "role": "user",
+    #     "content": f"Summarize a given article in 100 characters in Korean: {news_body}"
+    #     }
+    #     ],
+    #     temperature=1,
+    #     max_tokens=256,
+    #     top_p=1,
+    #     frequency_penalty=0,
+    #     presence_penalty=0
+    #     )
+    #     result_text = response['choices'][0]['message']['content']
+    #     return result_text
     
-    except Exception as e:
-        print(f"오류 발생: {e}")
-        return None
+    # except Exception as e:
+    #     print(f"오류 발생: {e}")
+    #     return None
 
 
 def select_top5():
