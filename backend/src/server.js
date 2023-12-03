@@ -80,7 +80,7 @@ app.post('/api/articles/by-date', async (req, res) => {
     // Combine articles and word cloud image URL in the response
     const combinedResponse = {
         articles: articles,
-        wordCloudImageUrl: null
+        wordCloudImageUrl: process.env.TEST_S3_URL
     };
     res.json(combinedResponse);
   } catch (error) {
