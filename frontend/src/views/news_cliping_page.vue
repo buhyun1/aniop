@@ -19,7 +19,6 @@ export default {
     return {
       startDate: null,
       endDate: null,
-      responseData: [],
     };
   },
   methods: {
@@ -42,11 +41,8 @@ export default {
       axios
         .post("http://localhost:3000/api/articles/by-date", requestData)
         .then((response) => {
-          console.log("데이터 전송 성공:", response.data);
+          console.log("데이터 전송 성공:", response);
           this.$emit("dataReceived", response.data);
-
-          /*this.$emit("dataReceived", response.data);
-          this.$emit("changeTab", "목록 확인");*/
         })
         .catch((error) => {
           console.error("데이터 전송 중 오류 발생:", error);

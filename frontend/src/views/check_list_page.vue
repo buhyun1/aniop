@@ -13,11 +13,7 @@
     </div>
     <div v-show="currentTab === 0" class="tab-content-box">
       <ul>
-        <li
-          v-for="item in policyItems"
-          :key="item.ArticleID"
-          class="news-item"
-        >
+        <li v-for="item in policyItems" :key="item.ArticleID" class="news-item">
           <div class="checkbox-title-container">
             <input
               type="checkbox"
@@ -70,13 +66,9 @@
       <button class="complete" @click="submitSelectedArticles">완료</button>
     </div>
   </div>
-  <div class="black-bg" v-if="modalOpen === true">
-    <div class="white-bg">
-      <h3>상품 제목입니다.</h3>
-      <p>상품 설명입니다.</p>
-      <button v-on:click="modalOpen = false" class="modal-exit-btn">
-        닫기
-      </button>
+  <div class="background1" v-if="modalOpen === true" @click="modalOpen = false">
+    <div class="background2">
+      <img v-if="wordCloudUrl" :src="wordCloudUrl" alt="wordCloudImage" />
     </div>
   </div>
 </template>
@@ -87,6 +79,7 @@ export default {
     newsData: {
       handler(newsData) {
         this.newsDataArticle = newsData.articles;
+        this.wordCloudUrl = newsData.wordCloudImageUrl;
       },
       immediate: true,
     },
@@ -112,6 +105,7 @@ export default {
         },
       ],
       newsDataArticle: [],
+      wordCloudUrl: this.newsData.wordCloudImageUrl,
     };
   },
   methods: {
@@ -136,7 +130,8 @@ export default {
         }
       }
       console.log("Selected Article IDs:", this.selectedArticleIds);
-      console.log("newDataArticle:", this.newDataArticle); // Add this line to log newDataArticle
+      console.log("newsData:", this.newsData);
+      console.log("wordCloudUrl:", this.wordCloudUrl);
     },
     submitSelectedArticles() {
       const postData = {
@@ -217,13 +212,13 @@ li {
   height: 50px;
   bottom: 10%;
   right: 26%;
-  background-color: #0070FF;
+  background-color: #0070ff;
   border: none;
   opacity: 0.7;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .tab-content-box {
   max-height: 500px;
@@ -243,7 +238,7 @@ li {
 .tabs {
   display: flex;
   margin-bottom: 10px;
-  color: #0070FF;
+  color: #0070ff;
 }
 .tab {
   cursor: pointer;
@@ -262,48 +257,49 @@ li {
 .tab-content > div.show {
   display: block;
 }
+
 .wordcloud {
   position: absolute;
   width: 100px;
   height: 50px;
   bottom: 10%;
   right: 32.5%;
-  background-color: #0070FF;
+  background-color: #0070ff;
   border: none;
   opacity: 0.7;
   border-radius: 32px;
   font-weight: bold;
   font-size: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .agreementCheckbox {
   margin-right: 10px;
   width: 16px; /* Set the width of the checkbox */
   height: 16px; /* Set the height of the checkbox */
 }
-.black-bg {
+
+.background1 {
   position: fixed;
   top: 0;
   left: 20%;
-  width: 100%;
+  width: 80%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* 다른 요소 위에 나타나도록 하는 z-index 설정 */
+  z-index: 1000;
 }
-.white-bg {
-  background-color: #fff;
-  opacity: 0.8;
-  padding: 20px;
-  width: 1200px;
-  height: 600px;
+.background2 {
+  background-color: transparent;
+  opacity: 0.7;
+  width: 0%;
+  height: 100%;
   text-align: center;
 }
 .modal-exit-btn {
-  margin-top: 10px;
+  margin-top: 500px;
   padding: 10px;
-  background-color: #0070FF;
+  background-color: #0070ff;
   color: #fff;
   border: none;
   cursor: pointer;

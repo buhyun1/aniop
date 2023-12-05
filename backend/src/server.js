@@ -26,7 +26,7 @@ async function initializeDatabase() {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
-    
+
   } catch (error) {
     console.error('Database connection error:', error);
   }
@@ -69,7 +69,7 @@ app.post('/api/articles/by-ids', async (req, res) => {
 
 const data = {
   news: [
-      // 여기에 뉴스 기사 제목과 관련 데이터를 포함
+    // 여기에 뉴스 기사 제목과 관련 데이터를 포함
   ]
 };
 app.post('/api/articles/by-date', async (req, res) => {
@@ -90,7 +90,7 @@ app.post('/api/articles/by-date', async (req, res) => {
 });
 app.get('*', (req, res) => {
   console.log(`GET request received: ${req.path}`);
-  if (!req.path.startsWith('/api')) {    
+  if (!req.path.startsWith('/api')) {
     const absolutePath = path.resolve(__dirname, '..', 'dist', 'index.html');
     console.log(`Serving index.html from: ${absolutePath}`);
     res.sendFile(absolutePath);
