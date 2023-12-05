@@ -56,6 +56,7 @@ export default {
 }
 
 .introtitle {
+  color: #0070ff;
   font-size: 40px;
   font-weight: bold;
   text-align: left;
