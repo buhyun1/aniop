@@ -1,6 +1,7 @@
 <template>
   <div>
     <menuWidget />
+    <sidebarWidget />
     <div class="tabs-container">
       <div class="tabs">
         <ul>
@@ -35,10 +36,12 @@ import menuWidget from "@/components/menu_widget.vue";
 import newsCliping from "@/views/news_cliping_page.vue";
 import checkList from "@/views/check_list_page.vue";
 import preview from "@/views/preview_page.vue";
+import sidebarWidget from "@/components/sidebar_widget.vue";
 
 export default {
   components: {
     menuWidget,
+    sidebarWidget,
   },
   data() {
     return {
@@ -151,4 +154,3 @@ li.active {
   }
 }
 </style>
-  

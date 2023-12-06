@@ -60,17 +60,27 @@
       </ul>
     </div>
     <div>
-      <button v-on:click="modalOpen = true" class="wordcloud">
+      <div v-show="currentTab === 3" class="tab-content-box">
+        <div class="wordCloudContainer">
+          <img
+            v-if="wordCloudUrl"
+            :src="wordCloudUrl"
+            alt="wordCloudImage"
+            class="wordcloud-image"
+          />
+        </div>
+      </div>
+      <!-- <button v-on:click="modalOpen = true" class="wordcloud">
         워드클라우드
-      </button>
+      </button> -->
       <button class="complete" @click="submitSelectedArticles">완료</button>
     </div>
   </div>
-  <div class="background1" v-if="modalOpen === true" @click="modalOpen = false">
+  <!-- <div class="background1" v-if="modalOpen === true" @click="modalOpen = false">
     <div class="background2">
       <img v-if="wordCloudUrl" :src="wordCloudUrl" alt="wordCloudImage" />
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
 import axios from "axios";
@@ -102,6 +112,9 @@ export default {
         },
         {
           name: "IT",
+        },
+        {
+          name: "워드클라우드",
         },
       ],
       newsDataArticle: [],
@@ -222,7 +235,7 @@ li {
 }
 .tab-content-box {
   max-height: 500px;
-  max-width: 700px;
+  max-width: 800px;
   overflow-y: auto;
   white-space: nowrap; /* 추가 */
   overflow-x: auto; /* 추가 */
@@ -242,7 +255,7 @@ li {
 }
 .tab {
   cursor: pointer;
-  margin-right: 200px;
+  margin-right: 100px;
   font-size: 20px;
   white-space: nowrap; /* 줄 바꿈 방지  추가 */
 }
@@ -278,7 +291,7 @@ li {
   height: 16px; /* Set the height of the checkbox */
 }
 
-.background1 {
+/* .background1 {
   position: fixed;
   top: 0;
   left: 20%;
@@ -303,5 +316,21 @@ li {
   color: #fff;
   border: none;
   cursor: pointer;
+} */
+
+.wordcloud-image {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  padding-bottom: 40%;
+}
+
+.wordCloudContainer {
+  width: 600px;
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 80px;
 }
 </style>
