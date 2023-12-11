@@ -7,11 +7,14 @@ from datetime import datetime
 import os
 import boto3
 from dotenv import load_dotenv
+
 load_dotenv()
+
 # 환경 변수에서 값 가져오기
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+
 # 불용어 목록
 stopwords = set(['기자', '연합뉴스', '에서', '이다', '것이다', '있다', '등', '이', '그', '저'])
 
