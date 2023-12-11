@@ -16,7 +16,7 @@ aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 region_name = os.getenv('REGION_NAME')
 
-def load_model(model_path, number_of_labels, tokenizer_path='bert-base-uncased'):
+def load_model(model_path, number_of_labels, tokenizer_path="kykim/bert-kor-base"):
     config = BertConfig.from_pretrained(tokenizer_path, num_labels=number_of_labels)
     model = MyModel1(config) # 설정 파일 로드
 
@@ -25,12 +25,16 @@ def load_model(model_path, number_of_labels, tokenizer_path='bert-base-uncased')
     model.eval()  # 평가 모드로 설정
     return model, tokenizer
 
-def predict(model, tokenizer, input_text):
+def predict(model, tokenizer, input_text, threshold=0.4):
     inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
     with torch.no_grad():
         outputs = model(**inputs)
     probabilities = torch.nn.functional.softmax(outputs.logits, dim=1)
-    return probabilities.numpy()
+    max_probs, predicted_category = torch.max(probabilities, dim=1)
+    # 임계값 이하일 경우 4로 설정
+    if max_probs.item() < threshold:
+        predicted_category = torch.tensor([4])
+    return predicted_category.numpy()
 
 def lambda_handler(event, context):
     print("event:", event)
@@ -47,7 +51,7 @@ def lambda_handler(event, context):
     # S3에서 입력 파일 읽기
     input_obj = s3.get_object(Bucket=bucket, Key=input_file_key)
     input_data = json.loads(input_obj['Body'].read().decode('utf-8'))
-    # for local test
+    # for S3 test
     model, tokenizer = load_model("../models/kobert/model.pth", 4)
     #for docker container
     #model, tokenizer = load_model('models/kobert/model.pth', 4)
@@ -59,9 +63,8 @@ def lambda_handler(event, context):
     
     for article in outdata['news']:
         input_text = article['Title']  # 'Title' 키 사용
-        prediction = predict(model, tokenizer, input_text)
-        predicted_category = prediction.argmax(axis=1).item()
-        article['Category'] = predicted_category
+        predicted_category = predict(model, tokenizer, input_text)
+        article['Category'] = predicted_category[0]
 
     # 결과를 JSON 문자열로 변환
     output_json = json.dumps(outdata, ensure_ascii=False)
@@ -75,11 +78,11 @@ def lambda_handler(event, context):
     }
 
 
-# 로컬 테스트
-if __name__ == "__main__":
-    test_event = {'bucket': 'aniop2023', 
-                  'input_file': '20231122_combined_news.json', 
-                  'output_file': '20231122_combined_news_2.json'}
-    test_context = None
-    result = lambda_handler(test_event, test_context)
-    print(result)
+# # 로컬 테스트
+# if __name__ == "__main__":
+#     test_event = {'bucket': 'aniop2023', 
+#                   'input_file': '20231211_news.json', 
+#                   'output_file': '20231211_combined_news_2.json'}
+#     test_context = None
+#     result = lambda_handler(test_event, test_context)
+#     print(result)
