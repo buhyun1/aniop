@@ -1,0 +1,59 @@
+# Docker Compose file 
+version: "3.3"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    # depends_on:
+    #   - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  crawler:
+    build:
+      context: ./crawler
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  # nginx:
+  #   image: nginx:stable-alpine
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - frontend
+  #   networks:
+  #     - app-network
+
+  models:
+    build:
+      context: ./notebooks
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"  # 필요한 포트 설정
+    networks:
+      - app-network
+
+  
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  static_volume:

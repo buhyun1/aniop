@@ -1,0 +1,14 @@
+requests
+beautifulsoup4
+pandas
+langdetect
+openpyxl
+fastapi
+uvicorn
+boto3
+python-dotenv
+openai==0.27.8
+aiohttp==3.8.5
+axios
+mysql-connector-python
+httpx

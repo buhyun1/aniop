@@ -1,0 +1,12 @@
+Pytorch >= 1.6.0
+transformers >= 4.6.0
+pandas
+python-dotenv
+sentence-transformers
+umap-learn
+scikit-learn
+hdbscan
+boto3
+pandas
+python-dotenv
+```

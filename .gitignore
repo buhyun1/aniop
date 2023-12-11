@@ -1,0 +1,13 @@
+// Gitignore 
+.env
+node_modules/
+model.safetensors
+model.pth
+pytorch_model.bin
+kobert/
+kobert.zip
+.ssh
+cron_log.txt
+docker_logs.txt
+model_0.93.pth
+*.sh

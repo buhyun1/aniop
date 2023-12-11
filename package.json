@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "dotenv": "^16.3.1",
+    "v-calendar": "^3.1.2"
+  }
+}
