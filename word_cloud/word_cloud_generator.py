@@ -96,8 +96,7 @@ def generate_wordcloud_api():
         buffer.seek(0)
 
         # S3에 이미지 업로드
-        current_date = datetime.now().strftime('%Y%m%d')
-        image_file_name = f'wordcloud_category_{category_id}_{current_date}.png'
+        image_file_name = f'wordcloud_category_{category_id}.png'
         upload_to_s3('aniop2023', image_file_name, buffer)
 
         # 업로드된 이미지의 S3 링크 출력
