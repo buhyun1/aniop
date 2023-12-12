@@ -35,8 +35,7 @@ def extract_titles_by_category(json_data, category_id):
     return text
 
 def generate_wordcloud(text, category_id):
-    okt = Okt()  # Okt 형태소 분석기 인스턴스 생성
-
+    okt = Okt()
     # 원본 텍스트가 비어 있다면 워드 클라우드 생성하지 않음
     if not text:
         return None
@@ -47,13 +46,17 @@ def generate_wordcloud(text, category_id):
 
     # 워드 클라우드 생성
     wordcloud = WordCloud(
-        font_path='./malgun.ttf',  # 한글 폰트 경로
+        font_path='malgun.ttf',
         width=800,
         height=400,
         background_color='white'
     ).generate_from_frequencies(word_counts)
 
-    return wordcloud
+    # 이미지를 로컬에 저장
+    local_image_file_name = f'wordcloud_category_{category_id}.png'
+    wordcloud.to_file(local_image_file_name)
+
+    return wordcloud, local_image_file_name
 
 def upload_to_s3(bucket_name, image_name, buffer):
     # S3 클라이언트 생성
@@ -82,13 +85,11 @@ def generate_wordcloud_api():
     data = request.json
     s3_image_urls = []
 
-    # 각 카테고리별로 워드 클라우드 생성 및 S3에 업로드
     for category_id in range(4):
-        # 제공된 JSON 데이터를 이용하여 텍스트 추출
         text = extract_titles_by_category(data, category_id)
 
-        # 워드 클라우드 생성
-        wordcloud = generate_wordcloud(text, category_id)
+        # 워드 클라우드 생성 및 로컬에 이미지 저장
+        wordcloud, local_image_file_name = generate_wordcloud(text, category_id)
 
         # 바이트 버퍼에 이미지 저장
         buffer = BytesIO()
@@ -102,9 +103,8 @@ def generate_wordcloud_api():
         # 업로드된 이미지의 S3 링크 출력
         image_url = f'https://{S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/{image_file_name}'
         s3_image_urls.append(image_url)
-        print(s3_image_urls)
 
-    return jsonify({'message': 'Word Clouds generated and uploaded to S3', 'image_urls': s3_image_urls})
+    return jsonify({'message': 'Word Clouds generated, saved locally, and uploaded to S3', 'image_urls': s3_image_urls})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

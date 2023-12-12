@@ -77,11 +77,11 @@ app.post('/api/articles/by-date', async (req, res) => {
     const articles = await getArticlesByDate(db, startdate, enddate);
     
     // Combine articles and word cloud image URL in the response
-    const response = await axios.post('http://wordcloud-service:5000/generate-wordcloud', articles);
+    //const response = await axios.post('http://wordcloud-service:5000/generate-wordcloud', articles);
     
     const combinedResponse = {
         articles: articles,
-        wordCloudImageUrl: response[0]
+        wordCloudImageUrl: process.env.TEST_S3_URL
     };
     res.json(combinedResponse);
   } catch (error) {
