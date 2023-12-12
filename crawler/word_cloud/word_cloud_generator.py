@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import boto3
 from dotenv import load_dotenv
+
 from konlpy.tag import Okt
 from collections import Counter
 from wordcloud import WordCloud
