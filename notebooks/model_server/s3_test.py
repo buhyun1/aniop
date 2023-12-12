@@ -50,6 +50,15 @@ def keep_only_title_and_link(bucket_name, file_name):
     print(input_data)
     return input_data
 
+def download_file_from_bucket(bucket_name, file_name, local_file_path):
+    try:
+        s3.download_file(Bucket=bucket_name, Key=file_name, Filename=local_file_path)
+        print(f"'{file_name}' 파일이 '{local_file_path}'로 성공적으로 다운로드되었습니다.")
+    except Exception as e:
+        print(f"파일을 다운로드하는 중 오류가 발생했습니다: {e}")
+
+
+
 def del_file_from_bucket(bucket_name, file_name):
     try:
         response = s3.delete_object(Bucket=bucket_name, Key=file_name)
@@ -68,8 +77,9 @@ def main():
         print("2: View a file from bucket")
         print("3: Keep only Title and Link in a file")
         print("4: Delete a file from bucket")
-        print("5: Exit")
-        choice = input("Enter your choice (1-5): ")
+        print("5: Download a file from bucket")
+        print("6: Exit")
+        choice = input("Enter your choice (1-6): ")
 
         if choice == '1':
             bucket_name = input("Enter bucket name: ")
@@ -87,10 +97,16 @@ def main():
             file_name = input("Enter file name: ")
             del_file_from_bucket(bucket_name, file_name)
         elif choice == '5':
+            bucket_name = input("Enter bucket name: ")
+            file_name = input("Enter file name: ")
+            local_file_path = input("Enter local file path: ")
+            download_file_from_bucket(bucket_name, file_name, local_file_path)
+        elif choice == '6':
             print("Exiting program.")
             break
         else:
-            print("Invalid choice, please choose a number between 1 and 5.")
+            print("Invalid choice, please choose a number between 1 and 6.")
 
 if __name__ == "__main__":
     main()
+    
