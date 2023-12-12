@@ -109,6 +109,7 @@ async def crawler():
         # Add filtering criteria here
         news_df = news_df[~news_df['Title'].str.contains('\\[포토\\]|\\[인사\\]|\\[부고\\]|\\[사진\\]|\\[동영상\\]')]
         news_df = news_df[~news_df['Title'].apply(is_english)]
+       
         word_list = [
         "산업정책", "경제정책", "제조업", "기술 혁신", "수출규제", "무역정책", "지역산업", "그린 에너지", "디지털화", "자동화",
         "고용정책", "국내 생산", "외국 진출", "연구 개발", "스타트업 지원", "금융 지원", "자원 개발", "정부 지원금", "산업 클러스터", "블록체인",
@@ -175,9 +176,12 @@ async def crawler():
         "조선스마트장비", "디지털교육", "로봇건설장비", "디지털조선품질보증", "로봇프로세스자동화",
         "건설데이터분석도구", "조선로봇AI", "머신러닝프레임워크", "건설현장로봇", "스마트조선자동화",
         "가상화기술"]
+        # news_df = news_df[news_df['Title'].str.contains('\\[?\\]|\\[인사\\]|\\[부고\\]|\\[사진\\]|\\[동영상\\]')]
+        filtered_df = pd.DataFrame(columns=["Title", "Link"])
         for word in word_list:
-        news_df = news_df[news_df['Title'].str.contains(f'{word}')]
-        
+        #     #news_df = news_df[news_df['Title'].str.contains(f'{word}')]
+            filtered_df = news_df[news_df['Title'].str.contains(f'{word}')]
+        #     filtered_df = pd.concat([news_df, filtered_articles])
         # Extract article content (you can uncomment this if needed)
         # with ThreadPoolExecutor(max_workers=10) as executor:
         #     news_df['Article'] = list(executor.map(extract_article_content, news_df['Link']))
@@ -191,7 +195,7 @@ async def crawler():
         #news_df.to_excel(excel_filename, index=False, engine='openpyxl')
         print(f"Successfully saved {section_name} news to {excel_filename}")
         # Append the DataFrame to the list
-        dataframes.append(news_df)
+        dataframes.append(filtered_df)
     # Concatenate DataFrames from different sections
     combined_df = pd.concat(dataframes)
     # 데이터프레임을 딕셔너리로 변환
