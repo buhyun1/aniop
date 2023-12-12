@@ -69,7 +69,7 @@ def select_top5():
     cursor = conn.cursor()
     print("데이터베이스 연결 성공")
 
-    for category_id in range(5):
+    for category_id in range(4):
         query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
         print(query)
         cursor.execute(query, (category_id,))
