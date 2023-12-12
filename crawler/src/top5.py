@@ -100,9 +100,10 @@ def select_top5():
                 print(f"날짜 추출: {date}")
                 
                 # 이미 저장한 기사인지 확인 (본문, 날짜, 요약을 모두 고려)
-                cursor.execute("SELECT COUNT(*) FROM Articles WHERE Title = %s AND Body = %s AND PublishedDate = %s AND Summary IS NOT NULL", (article_title, content, date,))
+                print("content",content[:10])
+                cursor.execute("SELECT COUNT(*) FROM Articles WHERE Body = %s", (content,))
                 if cursor.fetchone()[0] > 0:
-                    print(f"기사 제목, 본문, 날짜가 모두 동일한 기사가 이미 저장되어 있으므로 무시합니다.")
+                    print(f"기사 본문이 이미 저장되어 있으므로 요약을 진행하지 않습니다.")
                     continue
 
                 # 뉴스 요약

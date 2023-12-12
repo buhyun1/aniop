@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import boto3
 from dotenv import load_dotenv
+
 load_dotenv()
 # 환경 변수에서 값 가져오기
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
