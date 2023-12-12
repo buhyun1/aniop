@@ -31,20 +31,29 @@ def load_model(model_path):
     return model
 
 # Function to process UMAP
-def umap_process(corpus_embeddings, n_components=5):
-    return umap.UMAP(n_neighbors=15, n_components=n_components, metric='cosine').fit_transform(corpus_embeddings)
+def umap_process(corpus_embeddings, n_components=5, n_neighbors=15):
+    # Adjust n_neighbors if larger than the size of the dataset
+    n_neighbors = min(n_neighbors, len(corpus_embeddings) - 1)
+    if n_neighbors < 2:
+        print("UMAP requires at least two neighbors. Dataset too small.")
+        raise ValueError("UMAP requires at least two neighbors. Dataset too small.")
+
+    return umap.UMAP(n_neighbors=n_neighbors, n_components=n_components, metric='cosine').fit_transform(corpus_embeddings)
 
 def cluster_texts_by_category(model, df, category_col='Category', text_col='Title'):
     clustered_data = []
     for category in df[category_col].unique():
         category_df = df[df[category_col] == category]
-        if not category_df.empty:
-            embeddings = model.encode(category_df[text_col].tolist())
+        #카테고리가 비었거나, 갯수가 2개 이하인 경우 clustering 생략
+        if category_df.empty or len(category_df) <= 2:
+            logger.warning(f'Skipping category {category} due to insufficient number of samples.')
+            if len(category_df) >0:
+                for row in category_df:
+                    row['HDBSCAN_Cluster']=0
+            continue
+        embeddings = model.encode(category_df[text_col].tolist())
+        try:
             reduced_embeddings = umap_process(embeddings)
-            if reduced_embeddings.shape[0] < 2:
-                # Skip if the number of samples is less than 2
-                print(f'Skipping category {category} due to insufficient number of samples.')
-                continue  # 샘플 개수가 2개 미만인 경우 스킵
             # Agglomerative Clustering
             agg_cluster = AgglomerativeClustering(n_clusters=None, distance_threshold=0.3)
             agg_labels = agg_cluster.fit_predict(reduced_embeddings)
@@ -55,6 +64,10 @@ def cluster_texts_by_category(model, df, category_col='Category', text_col='Titl
             category_df['Agglomerative_Cluster'] = agg_labels
             category_df['HDBSCAN_Cluster'] = hdbscan_labels
             clustered_data.append(category_df)
+        except ValueError as e:
+            logger.error(f"UMAP processing failed: {e}")
+            continue
+
             
     return pd.concat(clustered_data)
 

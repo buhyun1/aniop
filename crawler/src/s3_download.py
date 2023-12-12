@@ -5,6 +5,7 @@ import json
 import mysql.connector
 import boto3
 from datetime import datetime, timedelta
+import pandas as pd
 
 def download_and_insert_data(clustered_file_name):
     print("clustered_file_name:", clustered_file_name, "with download_and_insert_data function")
@@ -85,11 +86,33 @@ def download_and_insert_data(clustered_file_name):
         cursor = conn.cursor()
 
         # JSON 데이터를 MySQL 데이터베이스에 삽입하는 코드
-        for item in data['news']:
-            title = item['Title']
-            link = item['Link']
-            CategoryID = item['Category']
-            DailyRelatedArticleCount = item['HDBSCAN_Cluster']
+        
+        # JSON 데이터를 DataFrame으로 변환
+        df = pd.DataFrame(data['news'])
+
+        # CategoryID와 DBSCAN_Cluster를 기준으로 그룹화하여 개수 계산
+        cluster_counts = df.groupby(['Category', 'HDBSCAN_Cluster']).size().reset_index(name='DailyRelatedArticleCount')
+
+        # 원본 데이터에 계산된 DailyRelatedArticleCount 추가
+        df = df.merge(cluster_counts, on=['Category', 'HDBSCAN_Cluster'])
+        
+        
+        # for item in data['news']:
+        #     title = item['Title']
+        #     link = item['Link']
+        #     CategoryID = item['Category']
+        #     DailyRelatedArticleCount = item['HDBSCAN_Cluster']
+        #     # INSERT 쿼리 실행
+        #     insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
+        #     cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))
+
+        #데이터베이스에 삽입
+        for index, row in df.iterrows():
+            title = row['Title']
+            link = row['Link']
+            CategoryID = row['Category']
+            DailyRelatedArticleCount = row['DailyRelatedArticleCount']
+
             # INSERT 쿼리 실행
             insert_query = "INSERT INTO Articles (Title, ArticleLink, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s)"
             cursor.execute(insert_query, (title, link, CategoryID, DailyRelatedArticleCount))

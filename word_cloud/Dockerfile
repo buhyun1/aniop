@@ -21,5 +21,9 @@ COPY . .
 # Flask 서버 실행을 위한 포트 번호 지정
 EXPOSE 5000
 
+# Java 환경 변수 설정
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH $PATH:$JAVA_HOME/bin
+
 # Flask 애플리케이션 실행 명령어
 CMD ["python", "word_cloud_generator.py"]

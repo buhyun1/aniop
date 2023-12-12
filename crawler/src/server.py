@@ -78,8 +78,8 @@ async def create_upload_file():
             #for delete json file
             base, ext = os.path.splitext(file_name)  # Splitting the file name into base and extension
 
-            # del_file_from_bucket("aniop2023",[file_name, f"{base}_2{ext}", f"{base}_3{ext}"])
-            # print(f"messeage : {file_name} was deleted")
+            del_file_from_bucket("aniop2023",[file_name, f"{base}_2{ext}", f"{base}_3{ext}"])
+            print(f"messeage : {file_name} was deleted")
             return {"message": f"File {clustered_file_name} processed successfully"}
 
         except Exception as e:
