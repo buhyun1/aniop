@@ -5,7 +5,7 @@ const { getArticles, getArticlesByDate, getArticlesByIds } = require('./query');
 const cors = require('cors');
 const app = express();
 const path = require('path');
-
+const axios = require('axios')
 let db;
 app.use(cors()); // 모든 출처 허용
 
@@ -77,9 +77,11 @@ app.post('/api/articles/by-date', async (req, res) => {
     const articles = await getArticlesByDate(db, startdate, enddate);
     
     // Combine articles and word cloud image URL in the response
+    const response = await axios.post('http://wordcloud-service:5000/generate-wordcloud', articles);
+    
     const combinedResponse = {
         articles: articles,
-        wordCloudImageUrl: process.env.TEST_S3_URL
+        wordCloudImageUrl: response[0]
     };
     res.json(combinedResponse);
   } catch (error) {

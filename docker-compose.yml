@@ -51,6 +51,16 @@ services:
     networks:
       - app-network
 
+  wordcloud-service:
+    build:
+      context: ./word_cloud
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
+
   
 networks:
   app-network:
