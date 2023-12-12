@@ -46,7 +46,7 @@ def generate_wordcloud(text, category_id):
 
     # 워드 클라우드 생성
     wordcloud = WordCloud(
-        font_path='malgun.ttf',
+        font_path='/app/malgun.ttf',
         width=800,
         height=400,
         background_color='white'
