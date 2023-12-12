@@ -133,16 +133,15 @@ def select_top5():
     # 변경 사항을 데이터베이스에 커밋
     conn.commit()
     print("데이터베이스 커밋 완료")
-    # delete_query = """
-    # DELETE FROM Articles 
-    # WHERE (PublishedDate IS NULL) 
-    # AND (Summary IS NULL OR Summary = '')
-    # """
-    # cursor.execute(delete_query)
-    # print("오래된 또는 업데이트되지 않은 기사 삭제 완료")
-    # conn.commit()
-    # print("삭제 커밋완료")
-    # 연결 종료
+    delete_query = """
+    DELETE FROM Articles 
+    WHERE (PublishedDate IS NULL) 
+    AND (Summary IS NULL OR Summary = '')
+    """
+    cursor.execute(delete_query)
+    print("오래된 또는 업데이트되지 않은 기사 삭제 완료")
+    conn.commit()
+    print("삭제 커밋완료")
     cursor.close()
     conn.close()
     print("데이터베이스 연결 종료")
