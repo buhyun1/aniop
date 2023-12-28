@@ -21,7 +21,8 @@ print("aws_secret_access_key :",aws_secret_access_key)
 print("region_name :",region_name)
 
 # Logging configuration
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
 
 def load_model(model_path):
@@ -53,7 +54,10 @@ def cluster_texts_by_category(model, df, category_col='Category', text_col='Titl
             continue
         embeddings = model.encode(category_df[text_col].tolist())
         try:
-            reduced_embeddings = umap_process(embeddings)
+            n_components=5
+            if(len(category_df)>=3 and len(category_df)<=10):
+                n_components=3    
+            reduced_embeddings = umap_process(embeddings, n_components=n_components)
             # Agglomerative Clustering
             agg_cluster = AgglomerativeClustering(n_clusters=None, distance_threshold=0.3)
             agg_labels = agg_cluster.fit_predict(reduced_embeddings)

@@ -70,13 +70,38 @@ def select_top5():
     print("데이터베이스 연결 성공")
 
     for category_id in range(4):
-        query = "SELECT ArticleLink FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
+        cluster_query = """
+        SELECT DBSCAN_Cluster, COUNT(*) as ArticleCount 
+        FROM Articles 
+        WHERE CategoryID = %s 
+        GROUP BY DBSCAN_Cluster 
+        ORDER BY ArticleCount DESC 
+        LIMIT 5
+        """
+        cursor.execute(cluster_query, (category_id,))
+        top_clusters = cursor.fetchall()
+
         print(query)
-        cursor.execute(query, (category_id,))
+        # query = "SELECT ArticleLink, DailyRelatedArticleCount FROM Articles WHERE CategoryID = %s ORDER BY DailyRelatedArticleCount DESC LIMIT 5"
+        # cursor.execute(query, (category_id,))
         
         print(f"Category ID {category_id}: 쿼리 실행 완료")
-
-        for (link,) in cursor.fetchall():
+        top_article_list=[]
+        for cluster_id, _ in top_clusters:
+            # 각 클러스터별 최상위 기사 선택
+            top_article_query = """
+            SELECT ArticleLink 
+            FROM Articles 
+            WHERE CategoryID = %s AND DBSCAN_Cluster = %s 
+            ORDER BY DailyRelatedArticleCount DESC 
+            LIMIT 1
+            """
+            cursor.execute(top_article_query, (category_id, cluster_id))
+            top_article = cursor.fetchone()
+            top_article_list.append(top_article)
+        
+        #for (link,ArticleCount) in cursor.fetchall():
+        for (link, ArticleCount) in top_article_list: 
             try:
                 # 이미 저장한 기사인지 확인
                 # cursor.execute("SELECT COUNT(*) FROM Articles WHERE ArticleLink = %s", (link,))
@@ -112,9 +137,10 @@ def select_top5():
 
                 # 본문, 날짜, 요약 내용을 데이터베이스에 업데이트
                 if content and date and summary:
-                    try:
-                        update_query = "INSERT INTO Articles (ArticleLink, Title, Body, PublishedDate, Summary, CategoryID) VALUES (%s, %s, %s, %s, %s, %s)"
-                        cursor.execute(update_query, (link, article_title, content, date, summary, category_id))
+                    try:                        
+                        update_query = "INSERT INTO Articles (ArticleLink, Title, Body, PublishedDate, Summary, CategoryID, DailyRelatedArticleCount) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        
+                        cursor.execute(update_query, (link, article_title, content, date, summary, category_id, ArticleCount))
                         print('SQL 업데이트 완료')
 
                         # 검증 쿼리

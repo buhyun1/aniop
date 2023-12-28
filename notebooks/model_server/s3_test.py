@@ -80,24 +80,19 @@ def main():
         print("5: Download a file from bucket")
         print("6: Exit")
         choice = input("Enter your choice (1-6): ")
-
+        bucket_name = "aniop2023"
         if choice == '1':
-            bucket_name = input("Enter bucket name: ")
             list_files_in_bucket(bucket_name)
         elif choice == '2':
-            bucket_name = input("Enter bucket name: ")
             file_name = input("Enter file name: ")
             see_file_from_bucket(bucket_name, file_name)
         elif choice == '3':
-            bucket_name = input("Enter bucket name: ")
             file_name = input("Enter file name: ")
             keep_only_title_and_link(bucket_name, file_name)
         elif choice == '4':
-            bucket_name = input("Enter bucket name: ")
             file_name = input("Enter file name: ")
             del_file_from_bucket(bucket_name, file_name)
         elif choice == '5':
-            bucket_name = input("Enter bucket name: ")
             file_name = input("Enter file name: ")
             local_file_path = input("Enter local file path: ")
             download_file_from_bucket(bucket_name, file_name, local_file_path)
